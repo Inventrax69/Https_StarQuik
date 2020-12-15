@@ -70,6 +70,7 @@ import retrofit2.Response;
 
 public class PalletTransfersFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
 
+    // This is made for testing
     private static final String classCode = "API_FRAG_0011";
     private View rootView;
     String scanner = null;
