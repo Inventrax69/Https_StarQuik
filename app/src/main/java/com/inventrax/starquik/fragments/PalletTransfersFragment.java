@@ -159,7 +159,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         spinnerSelectTenant = (SearchableSpinner) rootView.findViewById(R.id.spinnerSelectTenant);
         spinnerSelectWarehouse = (SearchableSpinner) rootView.findViewById(R.id.spinnerSelectWarehouse);
 
-        spinnerSelectTenant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*spinnerSelectTenant.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedTenant = spinnerSelectTenant.getSelectedItem().toString();
@@ -171,7 +171,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
 
         spinnerSelectWarehouse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -252,7 +252,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
 
             case R.id.btnGo:
-                if (!whId.equals("") && !tenantId.equals("")) {
+                if (!whId.equals("")) {
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
                     // method to get the storage locations
@@ -488,7 +488,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    public void getTenants() {
+   /* public void getTenants() {
 
         try {
 
@@ -590,8 +590,8 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
 
                     }
-
-                    // response object fails
+*/
+                 /*   // response object fails
                     @Override
                     public void onFailure(Call<String> call, Throwable throwable) {
                         //Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
@@ -620,7 +620,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
     }
-
+*/
     public void getWarehouse() {
 
         try {
@@ -775,7 +775,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         for (HouseKeepingDTO oHouseKeeping : lstWarehouse) {
             if (oHouseKeeping.getWarehouse().equals(selectedWH)) {
                 whId = oHouseKeeping.getWarehouseId();    // Warehouse Id of selected warehouse
-                getTenants();
+            //    getTenants();
             }
         }
     }
@@ -982,8 +982,8 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_activity_pallet_transfer));
     }
 
-    @Override
-    public void onDestroyView() {
+        @Override
+        public void onDestroyView() {
         // Honeywell onDestroyView
         if (barcodeReader != null) {
             // unregister barcode event listener honeywell

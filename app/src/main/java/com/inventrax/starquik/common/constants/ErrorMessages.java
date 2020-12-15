@@ -26,7 +26,7 @@ public class ErrorMessages {
 
     public String EMC_0010 = "Dock location scanned already.";
 
-    public String EMC_0011 = "Please select Tenant and Warehouse";
+    public String EMC_0011 = "Please select Warehouse";
 
     public String EMC_0012 = "No suggested Location";
 
