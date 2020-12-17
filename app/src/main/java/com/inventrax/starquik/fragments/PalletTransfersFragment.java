@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -98,6 +99,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     List<HouseKeepingDTO> lstTenants = null;
     List<HouseKeepingDTO> lstWarehouse = null;
     TextView txtWarehousetName,txtTendentName,txtFromPallet,txtLocation;
+    TextInputEditText sug_loc;
     ListView sku_list;
     SDKAdapter adapter;
 
@@ -153,7 +155,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
         txtFromPallet = (TextView) rootView.findViewById(R.id.txtFromPallet);
         txtLocation = (TextView) rootView.findViewById(R.id.txtLocation);
-
+        sug_loc=(TextInputEditText) rootView.findViewById(R.id.sug_loc);
         lstTenants = new ArrayList<HouseKeepingDTO>();
         lstWarehouse = new ArrayList<HouseKeepingDTO>();
 
@@ -256,6 +258,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                 if (!whId.equals("")) {
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
+                    btnBinComplete.setEnabled(false);
                     // method to get the storage locations
                 } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0011, getActivity(), getContext(), "Error");
@@ -288,6 +291,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
         txtFromPallet.setText("");
         txtLocation.setText("");
+        sug_loc.setText("");
         sku_list.setAdapter(null);
     }
 
@@ -318,7 +322,21 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                 if(!isPalletScaned){
                     ValidatePallet(scannedData);
                 }else{
-                    ValidateLocation(scannedData);
+                  //  ValidateLocation(scannedData);
+                   if (scannedData.equals(sug_loc.getText().toString())){
+                       txtLocation.setText(scannedData);
+                        btnBinComplete.setEnabled(true);
+                       cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                       ivScanLocation.setImageResource(R.drawable.check);
+
+                    }
+                  else {
+                       common.showUserDefinedAlertType(errorMessages.EMC_088, getActivity(), getContext(), "Error");
+                       cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                       ivScanLocation.setImageResource(R.drawable.invalid_cross);
+                       txtLocation.setText("");
+
+                   }
                 }
 
 
@@ -528,7 +546,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                 }
                 ProgressDialogUtils.closeProgressDialog();
                 DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
-
             }
             try {
                 //Getting response from the method
@@ -1513,11 +1530,13 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
                                 if(_lInventory!=null){
                                     if (_lInventory.size() > 0) {
+
                                         InventoryDTO inventorydto = null;
                                         for (int i = 0; i < _lInventory.size(); i++) {
                                             inventorydto = new InventoryDTO(_lInventory.get(i).entrySet());
                                             lstInventory.add(inventorydto);
                                         }
+                                        sug_loc.setText(lstInventory.get(0).getDisplayLocation());
                                         loadList(lstInventory);
                                     } else {
                                         sku_list.setAdapter(null);

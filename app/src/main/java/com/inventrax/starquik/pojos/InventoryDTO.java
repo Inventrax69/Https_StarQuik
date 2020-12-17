@@ -151,6 +151,9 @@ public class InventoryDTO {
 
     @SerializedName("ToStorageLocation")
     private String ToStorageLocation;
+    @SerializedName("DisplayLocation")
+    private String DisplayLocation;
+
 
 
     private boolean isChecked=false;
@@ -425,6 +428,11 @@ public class InventoryDTO {
                 case "ToStorageLocation":
                     if (entry.getValue() != null) {
                         this.setToStorageLocation(entry.getValue().toString());
+                    }
+                    break;
+                case "DisplayLocation":
+                    if (entry.getValue() != null) {
+                        this.setDisplayLocation(entry.getValue().toString());
                     }
                     break;
 
@@ -898,6 +906,12 @@ public class InventoryDTO {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+    public String getDisplayLocation() {
+        return DisplayLocation;
+    }
 
+    public void setDisplayLocation(String displayLocation) {
+        DisplayLocation = displayLocation;
+    }
 
 }

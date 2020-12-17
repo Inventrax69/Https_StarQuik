@@ -97,12 +97,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -152,8 +152,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
                 android:orientation="horizontal"
                 android:visibility="visible"
                 android:weightSum="3">
@@ -197,8 +197,6 @@
                         android:textSize="12sp"
                         android:textStyle="normal"
                         android:layout_alignParentLeft="true" />
-
-
                 </LinearLayout>
 
 
@@ -233,11 +231,11 @@
 
             <LinearLayout
                 android:padding="5dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginBottom="2dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="130dp">
 
 
                 <LinearLayout
@@ -286,7 +284,9 @@
                     <ListView
                         android:id="@+id/sku_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        android:fadeScrollbars="false">
                     </ListView>
 
                 </LinearLayout>
@@ -294,11 +294,11 @@
             </LinearLayout>
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/sug_loc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:hint="@string/suggestedLoc"
-            android:layout_marginBottom="2dp">
+            android:layout_marginBottom="1dp">
         </android.support.design.widget.TextInputEditText>
 
             <LinearLayout
