@@ -1311,7 +1311,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             TextView batchno=(TextView)rowView.findViewById(R.id.batchno);
             TextView qty=(TextView)rowView.findViewById(R.id.qty);
 
-            sku.setText(inventoryDTO_list.get(i).getMaterialCode());
+            sku.setText(inventoryDTO_list.get(i).getMaterialShortDescription());
             batchno.setText(inventoryDTO_list.get(i).getBatchNo());
             qty.setText(inventoryDTO_list.get(i).getQuantity());
 
