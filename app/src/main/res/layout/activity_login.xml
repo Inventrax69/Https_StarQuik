@@ -45,11 +45,11 @@
         <ImageView
             android:id="@+id/ivLogo"
             android:layout_width="190dp"
-            android:layout_height="55dp"
+            android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/mlogo" />
+            android:background="@drawable/fwms" />
 
     </RelativeLayout>
 

@@ -1,6 +1,6 @@
 <resources>
     <!-- <string name="app_name">Falcon WMS</string>-->
-    <string name="app_name">MWMS2020</string>
+    <string name="app_name">Falcon WMS</string>
     <!-- Navigation Drawer -->
 
     <string name="drawer_open">Open</string>
@@ -215,7 +215,7 @@
     <string name="from_pallet">From Pallet</string>
     <string name="putaway">Putaway</string>
     <string name="cycle_count">Cycle count</string>
-    <string name="internal_transfer">Internal transfer</string>
+    <string name="internal_transfer">Internal Transfer</string>
     <string name="live_stock">Live Stock</string>
     <string name="picking">Picking</string>
     <string name="receiving">Receiving</string>
@@ -227,4 +227,5 @@
     <string name="scancartoon"> Scan Cartoon</string>
     <string name="carton">Carton</string>
     <string name="so_number_list">SO Number list</string>
+    <string name="crate_transfer">Crate Transfer</string>
 </resources>

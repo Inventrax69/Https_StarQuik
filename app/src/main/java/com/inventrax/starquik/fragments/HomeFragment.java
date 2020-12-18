@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ll_picking = (LinearLayout) rootView.findViewById(R.id.ll_picking);
         ll_VLPDPicking = (LinearLayout) rootView.findViewById(R.id.ll_VLPDPicking);
         ll_houseKeeping = (LinearLayout) rootView.findViewById(R.id.ll_houseKeeping);
-        ll_cycleCount = (LinearLayout) rootView.findViewById(R.id.ll_cycleCount);
+        ll_cycleCount = (LinearLayout) rootView.findViewById(R.id.ll_cratetransfer);
         ll_livestock = (LinearLayout) rootView.findViewById(R.id.ll_livestock);
 
         ll_packing = (LinearLayout) rootView.findViewById(R.id.ll_packing);
@@ -122,9 +122,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, internalTransferheaderFragment);
                 break;
 
-            case R.id.ll_cycleCount:
-                CycleCountHeaderFragment cycleCountHeaderFragment = new CycleCountHeaderFragment();
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, cycleCountHeaderFragment);
+            case R.id.ll_cratetransfer:
+                PalletTransfersFragment palletTransfersFragment = new PalletTransfersFragment();
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, palletTransfersFragment);
                 break;
 
             case R.id.ll_livestock:

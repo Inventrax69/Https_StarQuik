@@ -67,6 +67,7 @@ public class ScanDTO {
     @SerializedName("SupplierInvoiceDetailsID")
     public String SupplierInvoiceDetailsID;
 
+
     public ScanDTO(){
 
     }

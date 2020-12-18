@@ -43,6 +43,7 @@ import com.inventrax.starquik.common.constants.EndpointConstants;
 import com.inventrax.starquik.common.constants.ErrorMessages;
 import com.inventrax.starquik.interfaces.ApiInterface;
 import com.inventrax.starquik.pojos.HouseKeepingDTO;
+import com.inventrax.starquik.pojos.InboundDTO;
 import com.inventrax.starquik.pojos.InventoryDTO;
 import com.inventrax.starquik.pojos.ScanDTO;
 import com.inventrax.starquik.pojos.WMSCoreMessage;
@@ -86,7 +87,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     private RelativeLayout rlIPalletTransfer, rlSelect;
     private CardView cvScanFromCont, cvScanLocation;
     private ImageView ivScanFromCont, ivScanLocation;
-    private SearchableSpinner spinnerSelectTenant, spinnerSelectWarehouse;
+    private SearchableSpinner spinnerSelectTenant, spinnerSelectWarehouse,spinnerSelectStRef;
     private Button btnBinComplete, btn_clear, btnGo;
 
     private String Materialcode = null, Userid = null, scanType = "", accountId = "", storageloc = "";
@@ -102,6 +103,9 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     TextInputEditText sug_loc;
     ListView sku_list;
     SDKAdapter adapter;
+    List<InboundDTO> lstInbound = null;
+    private String Storerefno = null,inboundId = null;
+
 
     // Cipher Barcode Scanner
     private final BroadcastReceiver myDataReceiver = new BroadcastReceiver() {
@@ -190,6 +194,19 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             }
         });
 
+        spinnerSelectStRef = (SearchableSpinner) rootView.findViewById(R.id.spinnerSelectStRef);
+        spinnerSelectStRef.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Storerefno = spinnerSelectStRef.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnBinComplete = (Button) rootView.findViewById(R.id.btnBinComplete);
         btn_clear = (Button) rootView.findViewById(R.id.btn_clear);
         btnGo = (Button) rootView.findViewById(R.id.btnGo);
@@ -211,7 +228,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         this.filter = new IntentFilter();
         this.filter.addAction("sw.reader.decode.complete");
         getActivity().registerReceiver(this.myDataReceiver, this.filter);
-
+        lstInbound = new ArrayList<InboundDTO>();
         common = new Common();
         gson = new GsonBuilder().create();
         core = new WMSCoreMessage();
@@ -239,7 +256,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
 /*        // To get tenants
         getTenants();*/
-
+        getStoreRefNo();
         getWarehouse();
 
     }
@@ -259,6 +276,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
                     btnBinComplete.setEnabled(false);
+                    getInboundId();
                     // method to get the storage locations
                 } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0011, getActivity(), getContext(), "Error");
@@ -1027,6 +1045,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             scanDTO.setAccountID(accountId);
             // scanDTO.setTenantID(String.valueOf(tenantID));
             scanDTO.setWarehouseID(whId);
+            scanDTO.setInboundID(inboundId);
             scanDTO.setScanInput(scannedData);
             // scanDTO.setInboundID(inboundId);
             //inboundDTO.setIsOutbound("0");
@@ -1590,4 +1609,148 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             return;
         }
     }
+
+    public void getStoreRefNo() {
+
+        try {
+
+
+            WMSCoreMessage message = new WMSCoreMessage();
+            message = common.SetAuthentication(EndpointConstants.Inbound, getContext());
+            InboundDTO inboundDTO = new InboundDTO();
+            inboundDTO.setUserId(Userid);
+            inboundDTO.setAccountID(accountId);
+            message.setEntityObject(inboundDTO);
+
+
+            Call<String> call = null;
+            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
+
+            try {
+                //Checking for Internet Connectivity
+                // if (NetworkUtils.isInternetAvailable()) {
+                // Calling the Interface method
+                call = apiService.GetStoreRefNos(message);
+                ProgressDialogUtils.showProgressDialog("Please Wait");
+                // } else {
+                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
+                // return;
+
+                // }
+
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
+
+            }
+            try {
+                //Getting response from the method
+                call.enqueue(new Callback<String>() {
+
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        try {
+
+                            core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
+                            if ((core.getType().toString().equals("Exception"))) {
+                                List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
+                                _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+
+                                WMSExceptionMessage owmsExceptionMessage = null;
+                                for (int i = 0; i < _lExceptions.size(); i++) {
+
+                                    owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
+
+
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
+                            } else {
+
+                                List<LinkedTreeMap<?, ?>> _lstPutaway = new ArrayList<LinkedTreeMap<?, ?>>();
+                                _lstPutaway = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+
+                                List<InboundDTO> lstDto = new ArrayList<InboundDTO>();
+                                List<String> _lstRefNo = new ArrayList<>();
+
+
+                                for (int i = 0; i < _lstPutaway.size(); i++) {
+                                    InboundDTO dto = new InboundDTO(_lstPutaway.get(i).entrySet());
+                                    lstDto.add(dto);
+                                    lstInbound.add(dto);
+                                }
+
+                                for (int i = 0; i < lstDto.size(); i++) {
+
+                                    // List of store ref no.
+                                    _lstRefNo.add(lstDto.get(i).getStoreRefNo());
+
+
+                                }
+
+
+                                ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, _lstRefNo);
+                                spinnerSelectStRef.setAdapter(arrayAdapter);
+                                ProgressDialogUtils.closeProgressDialog();
+
+                            }
+                        } catch (Exception ex) {
+                            try {
+                                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
+                                logException();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+
+
+                    }
+
+                    // response object fails
+                    @Override
+                    public void onFailure(Call<String> call, Throwable throwable) {
+                        //Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
+                        ProgressDialogUtils.closeProgressDialog();
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    }
+                });
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+            }
+        } catch (Exception ex) {
+            try {
+                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_04", getActivity());
+                logException();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
+        }
+    }
+    public void getInboundId() {
+        for (InboundDTO oInbound : lstInbound) {
+            if (oInbound.getStoreRefNo().equals(Storerefno)) {                // Gets selected inbound id of ref# from the list
+                // if the selected ref# equals
+                // to the list of ref no
+                inboundId = oInbound.getInboundID();
+            }
+        }
+    }
+
 }

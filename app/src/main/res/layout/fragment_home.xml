@@ -24,6 +24,7 @@
         android:layout_below="@+id/ivMainImage">
 
         <RelativeLayout
+            android:id="@+id/relative"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -159,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom|center_horizontal"
                             android:layout_marginBottom="5dp"
-                            android:text="@string/internal_transfer"
+                            android:text="Bin Transfer"
                             android:textSize="20sp" />
 
                     </LinearLayout>
@@ -180,7 +181,7 @@
 
 
                     <LinearLayout
-                        android:id="@+id/ll_cycleCount"
+                        android:id="@+id/ll_cratetransfer"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -192,14 +193,14 @@
                             android:layout_width="75dp"
                             android:layout_height="75dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/cyclecount" />
+                            android:src="@drawable/create_transfer" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom|center_horizontal"
                             android:layout_marginBottom="5dp"
-                            android:text="@string/cycle_count"
+                            android:text="@string/crate_transfer"
                             android:textSize="20sp" />
 
 
@@ -441,6 +442,19 @@
             </LinearLayout>
 
         </RelativeLayout>
+
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:id="@+id/inventrax"
+            android:layout_width="200dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center"
+            android:src="@drawable/inventrax_logonew" />
+    </LinearLayout>
 </RelativeLayout>
