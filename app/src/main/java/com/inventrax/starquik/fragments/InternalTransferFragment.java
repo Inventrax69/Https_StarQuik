@@ -1476,7 +1476,6 @@ public class InternalTransferFragment extends Fragment implements View.OnClickLi
             if (from.equalsIgnoreCase("from")) {
                 inventoryDTO.setLocationCode(etLocationFrom.getText().toString());
                 inventoryDTO.setContainerCode(pallet);
-
             } else {
                 inventoryDTO.setLocationCode(etLocationTo.getText().toString());
                 inventoryDTO.setContainerCode(pallet);
@@ -2239,7 +2238,7 @@ public class InternalTransferFragment extends Fragment implements View.OnClickLi
                             ScanDTO scanDTO1 = new ScanDTO(_lResult.entrySet());
 
                             if (scanDTO1 != null) {
-                                if (scanDTO1.getScanResult()) {
+                                    if (scanDTO1.getScanResult()) {
                                     if (!isLocationScaned) {
                                         etLocationFrom.setText(scannedData);
                                         cvScanFromLoc.setCardBackgroundColor(getResources().getColor(R.color.white));

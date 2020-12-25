@@ -44,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="invisible"
             android:layout_below="@+id/spinnerSelectWarehouse"
             android:text="@string/selectStRef">
 
@@ -54,6 +55,7 @@
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:visibility="invisible"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/tvSelectStRef">
 
@@ -111,7 +113,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white" />-->
 
-        </RelativeLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlIPalletTransfer"
@@ -161,6 +163,7 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:gravity="end"
+                    android:visibility="gone"
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:textStyle="bold" />
@@ -168,8 +171,8 @@
                     android:id="@+id/so_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/locationColor"
-                    android:textSize="25sp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     android:gravity="end"
                     android:layout_marginRight="4dp"
                     android:layout_gravity="end"
@@ -325,13 +328,14 @@
 
             </LinearLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/sug_loc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/suggestedLoc"
-            android:layout_marginBottom="1dp">
-        </android.support.design.widget.TextInputEditText>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/sug_loc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/suggestedLoc"
+                android:visibility="gone"
+                android:layout_marginBottom="1dp">
+            </android.support.design.widget.TextInputEditText>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -425,22 +429,23 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:layout_alignParentLeft="true" />
-       <Button
-           android:id="@+id/btn_export"
-           android:layout_width="100dp"
-           android:layout_height="40dp"
-           android:background="@drawable/button_shape"
-           android:layout_alignParentBottom="true"
-           android:gravity="center"
-           android:text="Pending"
-           android:textColor="@color/white"
-           android:layout_weight="1"
-           android:layout_marginBottom="10dp"
-           android:layout_centerInParent="true"
-           android:layout_marginTop="10dp"
-           android:elevation="30dp"
-           >
-       </Button>
+        <Button
+            android:id="@+id/btn_export"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_shape"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="Pending"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:elevation="30dp"
+            >
+        </Button>
         <Button
             android:id="@+id/btnBinComplete"
             android:layout_width="100dp"

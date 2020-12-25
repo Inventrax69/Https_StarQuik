@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.ll_houseKeeping:
-                InternalTransferFragment internalTransferheaderFragment = new InternalTransferFragment();
+                BinTransferFragment internalTransferheaderFragment = new BinTransferFragment();
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, internalTransferheaderFragment);
                 break;
 

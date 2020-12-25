@@ -211,7 +211,7 @@ public class DrawerFragmentWithList extends Fragment implements View.OnClickList
                 menuList.add(new NavDrawerItem("Putaway", R.drawable.go));
                 menuList.add(new NavDrawerItem("OBD Picking", R.drawable.go));
                 menuList.add(new NavDrawerItem("Delete OBD Picked Items", R.drawable.go));
-                menuList.add(new NavDrawerItem("Bin to Bin", R.drawable.go));
+                menuList.add(new NavDrawerItem("Bin Transfer", R.drawable.go));
                 menuList.add(new NavDrawerItem("Pallet Transfers", R.drawable.go));
                 menuList.add(new NavDrawerItem("Packing", R.drawable.go));
                 menuList.add(new NavDrawerItem("Loading", R.drawable.go));

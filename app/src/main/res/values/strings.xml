@@ -123,7 +123,8 @@
     <string name="title_activity_vbpl_list">VLPD List</string>
     <string name="title_activity_vlpd_pick">VLPD Pick</string>
     <string name="title_activity_internal_transfer">Transfer</string>
-    <string name="title_activity_pallet_transfer">Pallet Transfers</string>
+    <string name="title_activity_pallet_transfer">Crate Transfers</string>
+
     <string name="title_activity_cycle_count">Cycle Count</string>
     <string name="title_activity_bin_transfer">Bin Transfer</string>
     <string name="title_activity_settings">Settings</string>
@@ -228,4 +229,6 @@
     <string name="carton">Carton</string>
     <string name="so_number_list">SO Number list</string>
     <string name="crate_transfer">Crate Transfer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

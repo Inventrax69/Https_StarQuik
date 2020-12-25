@@ -79,6 +79,9 @@ public class InboundDTO {
     @SerializedName("SupplierInvoiceDetailsID")
     public String SupplierInvoiceDetailsID;
 
+    @SerializedName("message")
+    public String message;
+
     public InboundDTO() {
     }
 
@@ -229,6 +232,11 @@ public class InboundDTO {
                 case "VehicleNo":
                     if (entry.getValue() != null) {
                         this.setVehicleNo(entry.getValue().toString());
+                    }
+                    break;
+                case "message":
+                    if (entry.getValue() != null) {
+                        this.setMessage(entry.getValue().toString());
                     }
                     break;
 
@@ -492,4 +500,11 @@ public class InboundDTO {
         SupplierInvoiceDetailsID = supplierInvoiceDetailsID;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

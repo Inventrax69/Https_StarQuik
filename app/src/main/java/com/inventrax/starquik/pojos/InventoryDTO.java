@@ -153,6 +153,8 @@ public class InventoryDTO {
     private String ToStorageLocation;
     @SerializedName("DisplayLocation")
     private String DisplayLocation;
+    @SerializedName("InboundID")
+    private String InboundID;
 
 
 
@@ -433,6 +435,12 @@ public class InventoryDTO {
                 case "DisplayLocation":
                     if (entry.getValue() != null) {
                         this.setDisplayLocation(entry.getValue().toString());
+                    }
+                    break;
+
+                case "InboundID":
+                    if (entry.getValue() != null) {
+                        this.setInboundID(entry.getValue().toString());
                     }
                     break;
 
@@ -914,4 +922,11 @@ public class InventoryDTO {
         DisplayLocation = displayLocation;
     }
 
+    public String getInboundID() {
+        return InboundID;
+    }
+
+    public void setInboundID(String inboundID) {
+        InboundID = inboundID;
+    }
 }

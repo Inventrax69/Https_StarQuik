@@ -23,6 +23,7 @@ import com.honeywell.aidc.BarcodeReader;
 import com.inventrax.starquik.R;
 import com.inventrax.starquik.application.AbstractApplication;
 import com.inventrax.starquik.fragments.AboutFragment;
+import com.inventrax.starquik.fragments.BinTransferFragment;
 import com.inventrax.starquik.fragments.CycleCountDetailsFragment;
 import com.inventrax.starquik.fragments.CycleCountHeaderFragment;
 import com.inventrax.starquik.fragments.DeleteOBDPickedItemsFragment;
@@ -179,8 +180,8 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 if (fragment != null && fragment.isVisible() && fragment instanceof GoodsInFragment) {
                     ((GoodsInFragment) fragment).myScannedData(MainActivity.this, ScannedData);
                 }
-                if (fragment != null && fragment.isVisible() && fragment instanceof InternalTransferFragment) {
-                    ((InternalTransferFragment) fragment).myScannedData(MainActivity.this, ScannedData);
+                if (fragment != null && fragment.isVisible() && fragment instanceof BinTransferFragment) {
+                    ((BinTransferFragment) fragment).myScannedData(MainActivity.this, ScannedData);
                 }
                 if (fragment != null && fragment.isVisible() && fragment instanceof LiveStockFragment) {
                     ((LiveStockFragment) fragment).myScannedData(MainActivity.this, ScannedData);
@@ -433,15 +434,15 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
             }
             break;
 
-            case "Bin to Bin": {
-                fragment = new InternalTransferFragment();
-                title = "Transfers";
+            case "Bin Transfer": {
+                fragment = new BinTransferFragment();
+                title = "Bin Transfers";
             }
             break;
 
-            case "Pallet Transfers": {
+            case "Crate Transfers": {
                 fragment = new PalletTransfersFragment();
-                title = "Pallet Transfers";
+                title = "Crate Transfers";
             }
             break;
 

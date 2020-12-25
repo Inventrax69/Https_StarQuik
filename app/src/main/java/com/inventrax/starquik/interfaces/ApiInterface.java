@@ -51,6 +51,8 @@ public interface ApiInterface {
 
     @POST("Inbound/CheckPutAwayItemQty")
     Call<String> CheckPutAwayItemQty(@Body WMSCoreMessage oRequest);
+    @POST("Inbound/ShipmentClosed")
+    Call<String> ShipmentClosed(@Body WMSCoreMessage oRequest);
 
     // LiveStock
     @POST("HouseKeeping/GetTenants")
@@ -265,5 +267,10 @@ public interface ApiInterface {
     @POST("Scan/ValidateSO")
     Call<String> ValidateSO(@Body WMSCoreMessage oRequest);
 
+    @POST("Transfers/GetTotalPutwayCount")
+    Call<String> GetTotalPutwayCount(@Body WMSCoreMessage oRequest);
+
+    @POST("Transfers/GetMissingCrates")
+    Call<String> GetMissingCrates(@Body WMSCoreMessage oRequest);
 
 }

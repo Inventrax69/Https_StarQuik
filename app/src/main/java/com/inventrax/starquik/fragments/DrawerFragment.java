@@ -101,7 +101,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         List<String> mainListInbound = new ArrayList<String>();
         mainListInbound.add("Receiving");
         mainListInbound.add("Putaway");
-        mainListInbound.add("Pallet Transfers");
+        mainListInbound.add("Crate Transfers");
 
         // Adding child data List two
         List<String> mainListOutbound  = new ArrayList<String>();
@@ -119,7 +119,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
             mainListHouseKeeping.add("Material Transfers");
         }
 
-        mainListHouseKeeping.add("Bin to Bin");
+        mainListHouseKeeping.add("Bin Transfer");
         mainListHouseKeeping.add("Live Stock");
         mainListHouseKeeping.add("Cycle Count");
 
@@ -180,7 +180,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         if(isSupervisor){
             mainListHouseKeeping.add("Material Transfers");
         }
-        mainListHouseKeeping.add("Bin to Bin");
+        mainListHouseKeeping.add("Bin Transfer");
         mainListHouseKeeping.add("Live Stock");
         mainListHouseKeeping.add("Cycle Count");
 
@@ -412,7 +412,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new PutawayFragment());
             }
             break;
-            case "Pallet Transfers": {
+            case "Crate Transfers": {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new PalletTransfersFragment());
             }
             break;
@@ -444,8 +444,8 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new MaterialTransferFragment());
             }
             break;
-           case "Bin to Bin": {
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new InternalTransferFragment());
+           case "Bin Transfer": {
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new BinTransferFragment());
             }
             break;
             case "Live Stock": {
@@ -479,7 +479,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 menuList.add(new NavDrawerItem("Load Generation", R.drawable.go));
                 menuList.add(new NavDrawerItem("Loading", R.drawable.go));
                 // HouseKeeping
-                menuList.add(new NavDrawerItem("Bin to Bin", R.drawable.go));
+                menuList.add(new NavDrawerItem("Bin Transfer", R.drawable.go));
                 menuList.add(new NavDrawerItem("Cycle Count", R.drawable.go));
                 menuList.add(new NavDrawerItem("Live Stock", R.drawable.go));
 
