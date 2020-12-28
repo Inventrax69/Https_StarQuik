@@ -318,13 +318,13 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             case R.id.btn_export:
                 getMissingCrates();
            break;
-            case R.id.so_number:
+            /*case R.id.so_number:
                 DialogUtils.showConfirmDialog(getActivity(), "Shipment Closure","Are you Sure,  you want to close the Shipment?", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                shipMentClosed();
+                             //   shipMentClosed();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
@@ -332,7 +332,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                         }
                     }
                 });
-                break;
+                break;*/
 
         }
 
@@ -1624,14 +1624,15 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                                             inventorydto = new InventoryDTO(_lInventory.get(i).entrySet());
                                             if (inventorydto.getResult().equals("Done")) {
                                                 lstInventory.add(inventorydto);
+                                                sug_loc.setText(lstInventory.get(0).getDisplayLocation());
+                                                loadList(lstInventory);
                                             }
                                             else {
                                                 common.showUserDefinedAlertType(inventorydto.getResult(), getActivity(), getContext(), "Error");
                                             }
-                                            }
-                                            sug_loc.setText(lstInventory.get(0).getDisplayLocation());
 
-                                            loadList(lstInventory);
+                                            }
+
 
 
 
@@ -1857,9 +1858,19 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
                                     }
                                         ProgressDialogUtils.closeProgressDialog();
+                                    if (createNumList.size()>0) {
                                         crateDialog(createNumList);
+                                    }
+                                    else {
+                                        ProgressDialogUtils.closeProgressDialog();
+                                        common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
+                                    }
                                     } catch (Exception e) {
                                         e.printStackTrace();
+                                        ProgressDialogUtils.closeProgressDialog();
+                                        common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
+
+
                                     }
 
                     }
