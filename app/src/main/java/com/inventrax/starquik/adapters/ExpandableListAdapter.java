@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.inventrax.starquik.fragments.PutawayFragment;
 import com.inventrax.starquik.R;
+import com.inventrax.starquik.fragments.SkuPalletTransferFragment;
 import com.inventrax.starquik.util.FragmentUtils;
 
 import java.util.HashMap;
@@ -69,9 +70,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			public void onClick(View v) {
 				Bundle bundle = new Bundle();
 				bundle.putString("SuggestedId", childText.split("[/]", 2)[1]);
-				PutawayFragment putawayFragment = new PutawayFragment();
-				putawayFragment.setArguments(bundle);
-				FragmentUtils.replaceFragmentWithBackStack(fragmentActivity, R.id.container_body, putawayFragment);
+				SkuPalletTransferFragment skuPalletTransferFragment = new SkuPalletTransferFragment();
+				skuPalletTransferFragment.setArguments(bundle);
+				FragmentUtils.replaceFragmentWithBackStack(fragmentActivity, R.id.container_body, skuPalletTransferFragment);
 			}
 		});
 

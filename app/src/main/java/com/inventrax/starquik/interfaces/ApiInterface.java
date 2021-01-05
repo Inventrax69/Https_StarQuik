@@ -53,6 +53,8 @@ public interface ApiInterface {
     Call<String> CheckPutAwayItemQty(@Body WMSCoreMessage oRequest);
     @POST("Inbound/ShipmentClosed")
     Call<String> ShipmentClosed(@Body WMSCoreMessage oRequest);
+    @POST("Inbound/GeneratePutawaySuggestions")
+    Call <String> GeneratePutawaySuggestions(@Body WMSCoreMessage oRequest);
 
     // LiveStock
     @POST("HouseKeeping/GetTenants")

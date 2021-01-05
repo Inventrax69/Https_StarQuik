@@ -207,6 +207,7 @@
     <string name="fromLocation">From Loc.</string>
     <string name="delete">Delete</string>
     <string name="container">Container</string>
+    <string name="scan_sku">Scan SKU</string>
     <string name="skip">Skip</string>
     <string name="ok_">OK</string>
     <string name="hintContainer">Container</string>

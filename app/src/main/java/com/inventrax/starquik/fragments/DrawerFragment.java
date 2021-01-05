@@ -102,6 +102,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         mainListInbound.add("Receiving");
         mainListInbound.add("Putaway");
         mainListInbound.add("Crate Transfers");
+        mainListInbound.add("SKU Putaway");
 
         // Adding child data List two
         List<String> mainListOutbound  = new ArrayList<String>();
@@ -166,6 +167,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         mainListInbound.add("Receiving");
         mainListInbound.add("Putaway");
         mainListInbound.add("Pallet Transfers");
+        mainListInbound.add("SKU Putaway");
 
         // Adding child data List two
         List<String> mainListOutbound  = new ArrayList<String>();
@@ -416,6 +418,10 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new PalletTransfersFragment());
             }
             break;
+            case "SKU Putaway": {
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new SkuPutawayFragment());
+            }
+            break;
             case "OBD Picking": {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new OBDPickingHeaderFragment());
             }
@@ -473,6 +479,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 menuList.add(new NavDrawerItem("Receiving", R.drawable.go));
                 menuList.add(new NavDrawerItem("Putaway", R.drawable.go));
                 menuList.add(new NavDrawerItem("Pallet Transfers", R.drawable.go));
+                menuList.add(new NavDrawerItem("SKU Putaway", R.drawable.go));
                 // Outbound
                 menuList.add(new NavDrawerItem("OBD Picking", R.drawable.go));
                 menuList.add(new NavDrawerItem("Packing", R.drawable.go));

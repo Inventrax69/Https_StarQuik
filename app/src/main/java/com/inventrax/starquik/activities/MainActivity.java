@@ -46,6 +46,7 @@ import com.inventrax.starquik.fragments.PackingFragment;
 import com.inventrax.starquik.fragments.PackingInfoFragment;
 import com.inventrax.starquik.fragments.PalletTransfersFragment;
 import com.inventrax.starquik.fragments.PutawayFragment;
+import com.inventrax.starquik.fragments.SkuPutawayFragment;
 import com.inventrax.starquik.fragments.SortingFragment;
 import com.inventrax.starquik.fragments.StockTransferPutAway;
 import com.inventrax.starquik.fragments.UnloadingFragment;
@@ -233,6 +234,13 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 }
                 if (fragment != null && fragment.isVisible() && fragment instanceof MaterialTransferFragment) {
                     ((MaterialTransferFragment) fragment).myScannedData(MainActivity.this, ScannedData);
+                }
+
+                if (fragment != null && fragment.isVisible() && fragment instanceof MaterialTransferFragment) {
+                    ((MaterialTransferFragment) fragment).myScannedData(MainActivity.this, ScannedData);
+                }
+                if (fragment != null && fragment.isVisible() && fragment instanceof SkuPutawayFragment) {
+                    ((SkuPutawayFragment) fragment).myScannedData(MainActivity.this, ScannedData);
                 }
             }
         }
