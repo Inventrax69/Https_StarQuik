@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout
+        android:id="@+id/rlSelect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvSelectWarehouse"
+            style="@style/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:text="Warehouse">
+
+        </TextView>
+
+        <com.inventrax.starquik.searchableSpinner.SearchableSpinner
+            android:id="@+id/spinnerSelectWarehouse"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_below="@+id/tvSelectWarehouse"
+            android:layout_marginTop="10dp">
+
+        </com.inventrax.starquik.searchableSpinner.SearchableSpinner>
+
+        <TextView
+            android:id="@+id/tvSelectStRef"
+            style="@style/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/spinnerSelectWarehouse"
+            android:text="@string/selectStRef">
+
+        </TextView>
+
+        <com.inventrax.starquik.searchableSpinner.SearchableSpinner
+            android:id="@+id/spinnerSelectStRef"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tvSelectStRef">
+
+        </com.inventrax.starquik.searchableSpinner.SearchableSpinner>
+
+        <TextView
+            android:id="@+id/tvSelectTenant"
+            style="@style/textViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:layout_below="@+id/spinnerSelectWarehouse"
+            android:text="Tenant">
+
+        </TextView>
+
+        <com.inventrax.starquik.searchableSpinner.SearchableSpinner
+            android:id="@+id/spinnerSelectTenant"
+            android:visibility="gone"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tvSelectTenant"
+            >
+
+        </com.inventrax.starquik.searchableSpinner.SearchableSpinner>
+
+
+
+        <Button
+            android:id="@+id/btnGo"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="65dp"
+            android:visibility="gone"
+            android:background="@drawable/button_shape"
+            android:text="@string/go"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+        <!--<Button
+            android:id="@+id/btnCloseOne"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_close_shape"
+            android:elevation="30dp"
+            android:foreground="@drawable/button_cross_close"
+            android:foregroundGravity="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />-->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlIPalletTransfer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:weightSum="3"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/txtTendentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:gravity="start"
+                    android:layout_gravity="start"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtWarehousetName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:gravity="end"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/so_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/locationColor"
+                    android:textSize="25sp"
+                    android:gravity="end"
+                    android:layout_marginRight="4dp"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:weightSum="3">
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvScanFromCont"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignTop="@+id/cvScanLocation"
+                        android:layout_centerHorizontal="true"
+                        app:cardBackgroundColor="@color/palletColor"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/ivScanFromCont"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/fullscreen_img" />
+
+
+                    </android.support.v7.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvScanPallet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/cvScanLocation"
+                        android:text="@string/scan_sku"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:layout_alignParentLeft="true" />
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/txtFromPallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="130dp">
+
+
+                <LinearLayout
+                    android:weightSum="3"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:text="SKU"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:text="Batch"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:text="Quantity"
+                        android:layout_weight="1"
+                        android:textStyle="bold" />
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ListView
+                        android:id="@+id/sku_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        android:fadeScrollbars="false">
+                    </ListView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/sug_loc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/suggestedLoc"
+                android:layout_marginBottom="1dp">
+            </android.support.design.widget.TextInputEditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvScanLocation"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignTop="@+id/cvScanLocation"
+                        android:layout_centerHorizontal="true"
+                        app:cardBackgroundColor="@color/locationColor"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/ivScanLocation"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/fullscreen_img" />
+                    </android.support.v7.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvScanNewRSN"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/cvScanLocation"
+                        android:text="@string/scanLocation"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:layout_alignParentLeft="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/txtLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/btnBinComplete"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/button_shape"
+            android:elevation="30dp"
+            android:enabled="true"
+            android:gravity="center"
+            android:text="@string/clear"
+            android:layout_marginBottom="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_alignParentLeft="true" />
+        <Button
+            android:id="@+id/btn_export"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_shape"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="Pending"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:elevation="30dp"
+            >
+        </Button>
+        <Button
+            android:id="@+id/btnBinComplete"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_shape"
+            android:elevation="30dp"
+            android:enabled="true"
+            android:gravity="center"
+            android:text="@string/transfer"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
