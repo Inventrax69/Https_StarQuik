@@ -69,6 +69,12 @@ public class ScanDTO {
     @SerializedName("AllocationType")
     public boolean AllocationType;
 
+    @SerializedName("OEMPartNo")
+    public String OEMPartNo;
+    @SerializedName("MDescription")
+    public String MDescription;
+
+
 
     public ScanDTO(){
 
@@ -190,7 +196,19 @@ public class ScanDTO {
                         this.setAllocationType(Boolean.parseBoolean(entry.getValue().toString()));
                     }
                     break;
-            }
+                case "OEMPartNo":
+                    if (entry.getValue() != null) {
+                        this.setOEMPartNo(entry.getValue().toString());
+                    }
+                    break;
+                case "MDescription":
+                    if (entry.getValue() != null) {
+                        this.setMDescription(entry.getValue().toString());
+                    }
+                    break;
+
+
+        }
 
         }
     }
@@ -374,5 +392,23 @@ public class ScanDTO {
 
     public void setAllocationType(boolean allocationType) {
         AllocationType = allocationType;
+    }
+
+
+
+    public String getOEMPartNo() {
+        return OEMPartNo;
+    }
+
+    public void setOEMPartNo(String OEMPartNo) {
+        this.OEMPartNo = OEMPartNo;
+    }
+
+    public String getMDescription() {
+        return MDescription;
+    }
+
+    public void setMDescription(String MDescription) {
+        this.MDescription = MDescription;
     }
 }

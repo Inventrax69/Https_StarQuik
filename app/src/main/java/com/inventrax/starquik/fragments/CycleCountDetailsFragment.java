@@ -80,7 +80,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
     DialogUtils dialogUtils;
 
     private Button btnConfirm, btnBinComplete, btnClear, btnExportCC, btnCloseExport;
-    private TextView lblCycleCount, lblScannedSku;
+    private TextView lblCycleCount, lblScannedSku,ormpartnumber;
     private CardView cvScanLocation, cvScanContainer, cvScanSKU;
     private TextInputLayout txtInputLayoutLocation, txtInputLayoutContainer, txtInputLayoutSerial, txtInputLayoutBatch, txtInputLayoutMfgDate,
             txtInputLayoutExpDate, txtInputLayoutProjectRef, txtInputLayoutCCQty, txtInputLayoutMRP;
@@ -90,8 +90,10 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
     private RelativeLayout rlCC, rlCCExport;
     private RecyclerView rvPendingCC;
 
+
     String scanner = null;
     String getScanner = null;
+    String materialcode =null;
 
     private IntentFilter filter;
     private Gson gson;
@@ -185,7 +187,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
         lblCycleCount = (TextView) rootView.findViewById(R.id.lblCycleCount);
         lblScannedSku = (TextView) rootView.findViewById(R.id.lblScannedSku);
-
+        ormpartnumber = (TextView) rootView.findViewById(R.id.ormpartnumber);
         tvRack = (TextView) rootView.findViewById(R.id.tvRack);
         tvColumn = (TextView) rootView.findViewById(R.id.tvColumn);
         tvLevel = (TextView) rootView.findViewById(R.id.tvLevel);
@@ -508,6 +510,8 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                         ValidatePallet(scannedData);
                     } else {
                         ValiDateMaterial(scannedData);
+                        materialcode =scannedData;
+
                     }
                 }
 
@@ -840,7 +844,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
             cycleCountDTO.setAccountID(accountId);
             cycleCountDTO.setCCName(lblCycleCount.getText().toString());
             cycleCountDTO.setLocation(etLocation.getText().toString());
-            cycleCountDTO.setMaterialCode(lblScannedSku.getText().toString());
+            cycleCountDTO.setMaterialCode(materialcode);
             cycleCountDTO.setWarehouseID(warehouseId);
             cycleCountDTO.setTenantId(tenantId);
             message.setEntityObject(cycleCountDTO);
@@ -1006,8 +1010,8 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
             cycleCountDTO.setMaterialCode(lblScannedSku.getText().toString());
             cycleCountDTO.setCCQty(etCCQty.getText().toString());
             cycleCountDTO.setBatchNo(etBatch.getText().toString());
-            cycleCountDTO.setSerialNo(etSerial.getText().toString());
-            cycleCountDTO.setProjectRefNo(etProjectRef.getText().toString());
+            //cycleCountDTO.setSerialNo(etSerial.getText().toString());
+           // cycleCountDTO.setProjectRefNo(etProjectRef.getText().toString());
             cycleCountDTO.setMfgDate(etMfgDate.getText().toString());
             cycleCountDTO.setExpDate(etExpDate.getText().toString());
             //cycleCountDTO.setCount(tvCount.getText().toString());
@@ -1095,13 +1099,13 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
                                         materialCode = "";
                                         lblScannedSku.setText("");
-                                        etSerial.setText("");
+                                       // etSerial.setText("");
                                         etBatch.setText("");
                                         etMfgDate.setText("");
                                         etExpDate.setText("");
-                                        etProjectRef.setText("");
+                                       // etProjectRef.setText("");
                                         etCCQty.setText("");
-
+                                        ormpartnumber.setText("");
                                         soundUtils.alertSuccess(getActivity(), getContext());
 
                                         etCCQty.setEnabled(false);
@@ -1425,16 +1429,16 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
         cvScanSKU.setCardBackgroundColor(getResources().getColor(R.color.skuColor));
         ivScanSKU.setImageResource(R.drawable.fullscreen_img);
-
+          ormpartnumber.setText("");
         lblScannedSku.setText("");
         materialCode = "";
 
         etContainer.setText("");
         etExpDate.setText("");
         etMfgDate.setText("");
-        etSerial.setText("");
+       // etSerial.setText("");
         etBatch.setText("");
-        etProjectRef.setText("");
+       // etProjectRef.setText("");
         etCCQty.setText("");
         // To get Storage Locations
         getSLocs();
@@ -1470,9 +1474,9 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
         etContainer.setText("");
         etExpDate.setText("");
         etMfgDate.setText("");
-        etSerial.setText("");
+       // etSerial.setText("");
         etBatch.setText("");
-        etProjectRef.setText("");
+        //etProjectRef.setText("");
         etCCQty.setText("");
 
         rvPendingCC.setAdapter(null);
@@ -1483,6 +1487,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
         isValidLocation = false;
         isPalletScanned = false;
         isRSNScanned = false;
+        ormpartnumber.setText("");
         // To get Storage Locations
         getSLocs();
 
@@ -1862,6 +1867,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                             ivScanSKU.setImageResource(R.drawable.fullscreen_img);
                             ProgressDialogUtils.closeProgressDialog();
                             common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
+
                         } else {
                             LinkedTreeMap<?, ?> _lResult = new LinkedTreeMap<>();
                             _lResult = (LinkedTreeMap<?, ?>) core.getEntityObject();
@@ -1897,18 +1903,18 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
                                     materialCode = scanDTO1.getSkuCode();
 
-                                    lblScannedSku.setText(materialCode);
+                                    lblScannedSku.setText(scanDTO1.getMDescription());
+                                    ormpartnumber.setText(scanDTO1.getOEMPartNo());
                                     etBatch.setText(scanDTO1.getBatch());
-                                    etSerial.setText(scanDTO1.getSerialNumber());
+                                //    etSerial.setText(scanDTO1.getSerialNumber());
                                     etMfgDate.setText(scanDTO1.getMfgDate());
                                     etExpDate.setText(scanDTO1.getExpDate());
-                                    etProjectRef.setText(scanDTO1.getPrjRef());
+                                   // etProjectRef.setText(scanDTO1.getPrjRef());
                                     etCCMRP.setText(scanDTO1.getMrp());
 
                                     isRSNScanned = true;
                                     cvScanSKU.setCardBackgroundColor(getResources().getColor(R.color.white));
                                     ivScanSKU.setImageResource(R.drawable.check);
-
                                     checkMaterialAvailablilty();
 
                                 } else {

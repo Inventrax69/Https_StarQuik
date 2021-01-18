@@ -1514,6 +1514,7 @@ public void  closefields(){
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                   // qt=s.toString();
                     qt = qty.getText().toString();
                 }
             });
@@ -2864,7 +2865,6 @@ public void  closefields(){
 
                                         } else {
                                             common.showUserDefinedAlertType(dto.getResult(), getActivity(), getContext(), "Error");
-
                                             ProgressDialogUtils.closeProgressDialog();
                                         }
 
