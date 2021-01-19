@@ -129,6 +129,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     ListView listView;
     List<InventoryDTO> lstInventory;
     String qt;
+    String qq;
 
 
     // Cipher Barcode Scanner
@@ -299,6 +300,8 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         getWarehouse();
 
     }
+
+
 
 
     @Override
@@ -1196,7 +1199,6 @@ public void  closefields(){
             //inboundDTO.setIsOutbound("0");
             message.setEntityObject(scanDTO);
 
-
             Call<String> call = null;
             ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
 
@@ -1509,17 +1511,22 @@ public void  closefields(){
                 }
 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                    inventoryDTO_list.get(i).setQuantity(s.toString());
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
                    // qt=s.toString();
-                    qt = qty.getText().toString();
+                   // qt = qty.getText().toString();
+                    inventoryDTO_list.get(i).setQuantity(s.toString());
+
                 }
             });
 
             return rowView;
+        }
+        public ArrayList<InventoryDTO> getList() {
+            return (ArrayList<InventoryDTO>) inventoryDTO_list;
         }
     }
 
@@ -2741,7 +2748,13 @@ public void  closefields(){
             inventoryDTO.setTenantID(tenantId);
             inventoryDTO.setWarehouseId(whId);
             inventoryDTO.setWarehouse(selectedWH);
-           inventoryDTO.setQuantity(qt);
+            List<InventoryDTO> invList = adapter.getList();
+            for (int i=0;i<invList.size();i++)
+            {
+                qq =invList.get(i).getQuantity();
+
+            }
+           inventoryDTO.setQuantity(qq);
             inventoryDTO.setMaterialCode(textFromSku.getText().toString());
           /*  int size = adapter.getCount();
             String s =null;

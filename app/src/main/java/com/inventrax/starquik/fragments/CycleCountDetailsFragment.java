@@ -1007,7 +1007,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
             cycleCountDTO.setCCName(lblCycleCount.getText().toString());
             cycleCountDTO.setLocation(etLocation.getText().toString());
             cycleCountDTO.setPalletNo(etContainer.getText().toString());
-            cycleCountDTO.setMaterialCode(lblScannedSku.getText().toString());
+            cycleCountDTO.setMaterialCode(ormpartnumber.getText().toString());
             cycleCountDTO.setCCQty(etCCQty.getText().toString());
             cycleCountDTO.setBatchNo(etBatch.getText().toString());
             //cycleCountDTO.setSerialNo(etSerial.getText().toString());
