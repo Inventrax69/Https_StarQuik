@@ -125,6 +125,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         mainListHouseKeeping.add("Sku Bin Transfer");
         mainListHouseKeeping.add("Live Stock");
         mainListHouseKeeping.add("Cycle Count");
+        mainListHouseKeeping.add("Load Balancing");
 
 
         listDataChild.put(listDataParent.get(0), mainListInbound); // Header, Child data
@@ -189,6 +190,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
         mainListHouseKeeping.add("Sku Bin Transfer");
         mainListHouseKeeping.add("Live Stock");
         mainListHouseKeeping.add("Cycle Count");
+        mainListHouseKeeping.add("Load Balancing");
 
 
       //  listDataChild.put(listDataParent.get(0), mainListInbound); // Header, Child data
@@ -471,6 +473,10 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new InternalTransferFragment());
             }
             break;
+            case "Load Balancing": {
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new LoadBalanceingFragment());
+            }
+            break;
             default:
             break;
         }
@@ -499,6 +505,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
                 menuList.add(new NavDrawerItem("Sku Bin Transfer", R.drawable.go));
                menuList.add(new NavDrawerItem("Cycle Count", R.drawable.go));
                menuList.add(new NavDrawerItem("Live Stock", R.drawable.go));
+                menuList.add(new NavDrawerItem("Load Balancing", R.drawable.go));
 
 
                 // menuList.add(new NavDrawerItem("Delete OBD Picked Items", R.drawable.go));

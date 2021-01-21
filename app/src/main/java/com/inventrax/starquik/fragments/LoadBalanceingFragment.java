@@ -2,7 +2,6 @@ package com.inventrax.starquik.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -15,8 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,9 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,7 +33,6 @@ import android.widget.Toast;
 import com.cipherlab.barcode.GeneralString;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.internal.LinkedTreeMap;
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.BarcodeFailureEvent;
@@ -87,7 +81,7 @@ import static com.inventrax.starquik.util.ScreenUtils.getWindowManager;
  * Created by Prasann on 05/08/2018.
  */
 
-public class PalletTransfersFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
+public class LoadBalanceingFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
 
     // This is made for testing
     private static final String classCode = "API_FRAG_0011";
@@ -102,24 +96,21 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     Common common;
     private WMSCoreMessage core;
     private RelativeLayout rlIPalletTransfer, rlSelect;
-    private LinearLayout sku_layout,TOcontainer_layout;
-    private CardView cvScanFromCont, cvScanLocation,cvScanSku,cvScanTocontiner;
-    private ImageView ivScanFromCont, ivScanLocation,ivScansku,ivScanTocontiner;
+    private CardView cvScanFromCont, cvScanLocation;
+    private ImageView ivScanFromCont, ivScanLocation;
     private SearchableSpinner spinnerSelectTenant, spinnerSelectWarehouse,spinnerSelectStRef;
-    private Button btnBinComplete, btn_clear, btnGo,btn_export,btn_close;
-    ScanDTO scanDTOPal;
-    String s = null;
+    private Button btnBinComplete, btn_clear, btnGo,btn_export;
 
     private String Materialcode = null, Userid = null, scanType = "", accountId = "", storageloc = "";
     private int IsToLoc = 0;
     private ExceptionLoggerUtils exceptionLoggerUtils;
     private ErrorMessages errorMessages;
-    Boolean isPalletScaned = false, isLocationScaned = false, isSKUScanned = false, IsProceedForBinTransfer = false,isTOContainerScanner=false;
+    Boolean isPalletScaned = false, isLocationScaned = false, isSKUScanned = false, IsProceedForBinTransfer = false;
     private SoundUtils soundUtils;
     private String selectedTenant = "", selectedWH = "", tenantId = "", whId = "";
     List<HouseKeepingDTO> lstTenants = null;
     List<HouseKeepingDTO> lstWarehouse = null;
-    TextView txtWarehousetName,txtTendentName,txtFromPallet,txtLocation,so_number,textFromSku,textScanTocontiner,tvScanTocontiner;
+    TextView txtWarehousetName,txtTendentName,txtFromPallet,txtLocation,so_number;
     TextInputEditText sug_loc;
     ListView sku_list;
     SDKAdapter adapter;
@@ -127,9 +118,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     private String Storerefno = null,inboundId = null;
     ArrayAdapter madapter;
     ListView listView;
-    List<InventoryDTO> lstInventory;
-    String qt;
-    String qq;
 
 
     // Cipher Barcode Scanner
@@ -149,7 +137,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    public PalletTransfersFragment() {
+    public LoadBalanceingFragment() {
 
     }
 
@@ -157,7 +145,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_pallet_tranfers, container, false);
+        rootView = inflater.inflate(R.layout.fragment_load_balanceing, container, false);
         loadFormControls();
         return rootView;
 
@@ -171,28 +159,19 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         accountId = sp.getString("AccountId", "");
 
         rlIPalletTransfer = (RelativeLayout) rootView.findViewById(R.id.rlIPalletTransfer);
-        sku_layout = (LinearLayout) rootView.findViewById(R.id.sku_layout);
-        TOcontainer_layout = (LinearLayout) rootView.findViewById(R.id.TOcontainer_layout);
-
         rlSelect = (RelativeLayout) rootView.findViewById(R.id.rlSelect);
 
         cvScanFromCont = (CardView) rootView.findViewById(R.id.cvScanFromCont);
-        cvScanSku = (CardView) rootView.findViewById(R.id.cvScanSku);
-        cvScanTocontiner = (CardView) rootView.findViewById(R.id.cvScanTocontiner);
         cvScanLocation = (CardView) rootView.findViewById(R.id.cvScanLocation);
-        ivScansku  = (ImageView) rootView.findViewById(R.id.ivScansku);
+
         ivScanFromCont = (ImageView) rootView.findViewById(R.id.ivScanFromCont);
         ivScanLocation = (ImageView) rootView.findViewById(R.id.ivScanLocation);
-        ivScanTocontiner = (ImageView) rootView.findViewById(R.id.ivScanTocontiner);
         so_number = (TextView) rootView.findViewById(R.id.so_number);
         txtWarehousetName = (TextView) rootView.findViewById(R.id.txtWarehousetName);
         txtTendentName = (TextView) rootView.findViewById(R.id.txtTendentName);
 
         txtFromPallet = (TextView) rootView.findViewById(R.id.txtFromPallet);
-        textFromSku = (TextView) rootView.findViewById(R.id.textFromSku);
         txtLocation = (TextView) rootView.findViewById(R.id.txtLocation);
-        tvScanTocontiner = (TextView) rootView.findViewById(R.id.tvScanTocontiner);
-        textScanTocontiner= (TextView) rootView.findViewById(R.id.textScanTocontiner);
         sug_loc=(TextInputEditText) rootView.findViewById(R.id.sug_loc);
         lstTenants = new ArrayList<HouseKeepingDTO>();
         lstWarehouse = new ArrayList<HouseKeepingDTO>();
@@ -242,20 +221,17 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         });
 
         btnBinComplete = (Button) rootView.findViewById(R.id.btnBinComplete);
-        btn_close= (Button) rootView.findViewById(R.id.btn_close);
         btn_export = (Button) rootView.findViewById(R.id.btn_export);
 
         btn_clear = (Button) rootView.findViewById(R.id.btn_clear);
         btnGo = (Button) rootView.findViewById(R.id.btnGo);
         sku_list=(ListView)rootView.findViewById(R.id.sku_list);
 
-        btn_close.setOnClickListener(this);
         btnBinComplete.setOnClickListener(this);
         btn_export.setOnClickListener(this);
         btn_clear.setOnClickListener(this);
         btnGo.setOnClickListener(this);
         cvScanFromCont.setOnClickListener(this);
-        so_number.setOnClickListener(this);
 
         exceptionLoggerUtils = new ExceptionLoggerUtils();
         errorMessages = new ErrorMessages();
@@ -296,12 +272,10 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
 
 /*        // To get tenants
         getTenants();*/
-        getStoreRefNo();
+        // getStoreRefNo();
         getWarehouse();
 
     }
-
-
 
 
     @Override
@@ -320,7 +294,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
                     btnBinComplete.setEnabled(false);
-                        getTotalPutwayCount();
+                    //getTotalPutwayCount();
 
                     // method to get the storage locations
                 } else {
@@ -329,14 +303,10 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                 break;
 
             case R.id.btnBinComplete:
-               if(!txtLocation.getText().toString().isEmpty() && !scanDTOPal.isAllocationType()) {
-                   TransferPalletToLocation();
-               }
+                if(!txtLocation.getText().toString().isEmpty()){
+                    TransferPalletToLocation();
 
-                else if (!txtLocation.getText().toString().isEmpty() && scanDTOPal.isAllocationType()){
-                    UpsertBinToBinTransfer();
-                }
-                else{
+                }else{
                     if(!isPalletScaned)
                         common.showUserDefinedAlertType("Please scan pallet", getActivity(), getContext(), "Error");
                     else
@@ -344,30 +314,13 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                 }
                 break;
             case R.id.btn_export:
-                getMissingCrates();
-           break;
-            case R.id.btn_close:
-                closefields();
-                break;
-            /*case R.id.so_number:
-                DialogUtils.showConfirmDialog(getActivity(), "Shipment Closure","Are you Sure,  you want to close the Shipment?", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                             //   shipMentClosed();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                            dialog.dismiss();
-                                break;
-                        }
-                    }
-                });
-                break;*/
+                //getMissingCrates();
+
+
 
         }
 
-        }
+    }
     void crateDialog(List<String> crateNumbers){
         AlertDialog.Builder alertDialog = new
                 AlertDialog.Builder(getContext());
@@ -392,59 +345,23 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         layoutParams.height = dialogWindowHeight;
         dialog.getWindow().setAttributes(layoutParams);
     }
-public void  closefields(){
-    cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-    ivScanLocation.setImageResource(R.drawable.fullscreen_img);
-    cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-    ivScansku.setImageResource(R.drawable.fullscreen_img);
-  isPalletScaned=false;
-  txtFromPallet.setText("");
-  cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-  ivScanFromCont.setImageResource(R.drawable.fullscreen_img);
-    isSKUScanned=false;
-    textFromSku.setText("");
 
-    txtLocation.setText("");
-    sug_loc.setText("");
-    isTOContainerScanner=false;
-    cvScanTocontiner.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-    ivScanTocontiner.setImageResource(R.drawable.fullscreen_img);
-    textScanTocontiner.setText("");
-    sku_list.setAdapter(null);
-    sku_layout.setVisibility(View.GONE);
-    TOcontainer_layout.setVisibility(View.GONE);
-
-}
 
 
     private void Clearfields() {
 
-
+        cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
+        ivScanFromCont.setImageResource(R.drawable.fullscreen_img);
 
         cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
         ivScanLocation.setImageResource(R.drawable.fullscreen_img);
-        cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-        ivScansku.setImageResource(R.drawable.fullscreen_img);
-         sku_list.setAdapter(null);
-        isSKUScanned=false;
 
-         textFromSku.setText("");
+        isPalletScaned = false;
 
+        txtFromPallet.setText("");
         txtLocation.setText("");
         sug_loc.setText("");
-        isTOContainerScanner=false;
-        cvScanTocontiner.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-        ivScanTocontiner.setImageResource(R.drawable.fullscreen_img);
-        textScanTocontiner.setText("");
-        if (scanDTOPal!=null) {
-            if (!scanDTOPal.isAllocationType()) {
-                isPalletScaned = false;
-                txtFromPallet.setText("");
-                cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                ivScanFromCont.setImageResource(R.drawable.fullscreen_img);
-            }
-        }
-
+        sku_list.setAdapter(null);
     }
 
     public void  loadList(List<InventoryDTO> inventoryDTO_list){
@@ -473,38 +390,28 @@ public void  closefields(){
 
                 if(!isPalletScaned){
                     ValidatePallet(scannedData);
+                }/*else{
 
-                }else if(!isSKUScanned) {
-                    isSKUScanned=true;
-                    textFromSku.setText(scannedData);
-                    cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.white));
-                    ivScansku.setImageResource(R.drawable.check);
-                    GetActivestockSKU();
-                }
-                else if (!isTOContainerScanner){
-                    isTOContainerScanner=true;
-                    textScanTocontiner.setText(scannedData);
-                    cvScanTocontiner.setCardBackgroundColor(getResources().getColor(R.color.white));
-                    ivScanTocontiner.setImageResource(R.drawable.check);
-                }
-
-                 else {
-                   //ValidateLocation(scannedData);
-                   if (scannedData.equals(sug_loc.getText().toString())){
-                       txtLocation.setText(scannedData);
+                    txtLocation.setText(scannedData);
+                    btnBinComplete.setEnabled(true);
+                    cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                    ivScanLocation.setImageResource(R.drawable.check);
+                    // ValidateLocation(scannedData);
+                   *//* if (scannedData.equals(sug_loc.getText().toString())){
+                        txtLocation.setText(scannedData);
                         btnBinComplete.setEnabled(true);
-                       cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
-                       ivScanLocation.setImageResource(R.drawable.check);
+                        cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        ivScanLocation.setImageResource(R.drawable.check);
 
                     }
-                  else {
-                       common.showUserDefinedAlertType(errorMessages.EMC_088, getActivity(), getContext(), "Error");
-                       cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
-                       ivScanLocation.setImageResource(R.drawable.invalid_cross);
-                       txtLocation.setText("");
+                    else {
+                        common.showUserDefinedAlertType(errorMessages.EMC_088, getActivity(), getContext(), "Error");
+                        cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        ivScanLocation.setImageResource(R.drawable.invalid_cross);
+                        txtLocation.setText("");
 
-                   }
-                }
+                    }*//*
+                }*/
 
 
 
@@ -674,108 +581,108 @@ public void  closefields(){
         }
     }
 
-   /* public void getTenants() {
+    /* public void getTenants() {
 
-        try {
-
-
-            WMSCoreMessage message = new WMSCoreMessage();
-            message = common.SetAuthentication(EndpointConstants.HouseKeepingDTO, getContext());
-            HouseKeepingDTO houseKeepingDTO = new HouseKeepingDTO();
-            houseKeepingDTO.setUserId(Userid);
-            houseKeepingDTO.setTenantID(tenantId);
-            houseKeepingDTO.setAccountID(accountId);
-            houseKeepingDTO.setWarehouseId(whId);
-            message.setEntityObject(houseKeepingDTO);
+         try {
 
 
-            Call<String> call = null;
-            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-
-            try {
-                //Checking for Internet Connectivity
-                // if (NetworkUtils.isInternetAvailable()) {
-                // Calling the Interface method
-                call = apiService.GetTenants(message);
-                ProgressDialogUtils.showProgressDialog("Please Wait");
-                // } else {
-                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
-                // return;
-
-                // }
-
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ProgressDialogUtils.closeProgressDialog();
-                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
-            }
-            try {
-                //Getting response from the method
-                call.enqueue(new Callback<String>() {
-
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                        try {
-
-                            core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-                            if ((core.getType().toString().equals("Exception"))) {
-                                List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
-                                _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
-                                WMSExceptionMessage owmsExceptionMessage = null;
-                                for (int i = 0; i < _lExceptions.size(); i++) {
-
-                                    owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
+             WMSCoreMessage message = new WMSCoreMessage();
+             message = common.SetAuthentication(EndpointConstants.HouseKeepingDTO, getContext());
+             HouseKeepingDTO houseKeepingDTO = new HouseKeepingDTO();
+             houseKeepingDTO.setUserId(Userid);
+             houseKeepingDTO.setTenantID(tenantId);
+             houseKeepingDTO.setAccountID(accountId);
+             houseKeepingDTO.setWarehouseId(whId);
+             message.setEntityObject(houseKeepingDTO);
 
 
-                                }
-                                ProgressDialogUtils.closeProgressDialog();
-                                common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
-                            } else {
+             Call<String> call = null;
+             ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
 
-                                List<LinkedTreeMap<?, ?>> _lstActiveStock = new ArrayList<LinkedTreeMap<?, ?>>();
-                                _lstActiveStock = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+             try {
+                 //Checking for Internet Connectivity
+                 // if (NetworkUtils.isInternetAvailable()) {
+                 // Calling the Interface method
+                 call = apiService.GetTenants(message);
+                 ProgressDialogUtils.showProgressDialog("Please Wait");
+                 // } else {
+                 // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
+                 // return;
 
-                                List<HouseKeepingDTO> lstDto = new ArrayList<HouseKeepingDTO>();
-                                List<String> _lstStock = new ArrayList<>();
+                 // }
 
-                                ProgressDialogUtils.closeProgressDialog();
+             } catch (Exception ex) {
+                 try {
+                     exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
+                     logException();
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+                 ProgressDialogUtils.closeProgressDialog();
+                 DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
+             }
+             try {
+                 //Getting response from the method
+                 call.enqueue(new Callback<String>() {
 
-                                for (int i = 0; i < _lstActiveStock.size(); i++) {
-                                    HouseKeepingDTO dto = new HouseKeepingDTO(_lstActiveStock.get(i).entrySet());
-                                    lstDto.add(dto);
-                                    lstTenants.add(dto);
-                                }
+                     @Override
+                     public void onResponse(Call<String> call, Response<String> response) {
 
-                                for (int i = 0; i < lstDto.size(); i++) {
+                         try {
 
-                                    _lstStock.add(lstDto.get(i).getTenantName());
+                             core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
+                             if ((core.getType().toString().equals("Exception"))) {
+                                 List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
+                                 _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
 
-                                }
+                                 WMSExceptionMessage owmsExceptionMessage = null;
+                                 for (int i = 0; i < _lExceptions.size(); i++) {
 
-
-                                ArrayAdapter liveStockAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, _lstStock);
-                                spinnerSelectTenant.setAdapter(liveStockAdapter);
-                            }
-                        } catch (Exception ex) {
-                            try {
-                                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
-                                logException();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            ProgressDialogUtils.closeProgressDialog();
-                        }
+                                     owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
 
 
-                    }
-*/
+                                 }
+                                 ProgressDialogUtils.closeProgressDialog();
+                                 common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
+                             } else {
+
+                                 List<LinkedTreeMap<?, ?>> _lstActiveStock = new ArrayList<LinkedTreeMap<?, ?>>();
+                                 _lstActiveStock = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+
+                                 List<HouseKeepingDTO> lstDto = new ArrayList<HouseKeepingDTO>();
+                                 List<String> _lstStock = new ArrayList<>();
+
+                                 ProgressDialogUtils.closeProgressDialog();
+
+                                 for (int i = 0; i < _lstActiveStock.size(); i++) {
+                                     HouseKeepingDTO dto = new HouseKeepingDTO(_lstActiveStock.get(i).entrySet());
+                                     lstDto.add(dto);
+                                     lstTenants.add(dto);
+                                 }
+
+                                 for (int i = 0; i < lstDto.size(); i++) {
+
+                                     _lstStock.add(lstDto.get(i).getTenantName());
+
+                                 }
+
+
+                                 ArrayAdapter liveStockAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, _lstStock);
+                                 spinnerSelectTenant.setAdapter(liveStockAdapter);
+                             }
+                         } catch (Exception ex) {
+                             try {
+                                 exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
+                                 logException();
+                             } catch (IOException e) {
+                                 e.printStackTrace();
+                             }
+                             ProgressDialogUtils.closeProgressDialog();
+                         }
+
+
+                     }
+ */
                  /*   // response object fails
                     @Override
                     public void onFailure(Call<String> call, Throwable throwable) {
@@ -949,18 +856,18 @@ public void  closefields(){
                 tenantId = oHouseKeeping.getTenantID();   // Te
 
                 // get warehouses of selected tenant
-              //  getWarehouse();
+                //  getWarehouse();
             }
         }
 
-        
+
     }
 
     public void getWarehouseId() {
         for (HouseKeepingDTO oHouseKeeping : lstWarehouse) {
             if (oHouseKeeping.getWarehouse().equals(selectedWH)) {
                 whId = oHouseKeeping.getWarehouseId();    // Warehouse Id of selected warehouse
-            //    getTenants();
+                //    getTenants();
             }
         }
     }
@@ -1164,11 +1071,11 @@ public void  closefields(){
                 // Toast.makeText(this, "Scanner unavailable", Toast.LENGTH_SHORT).show();
             }
         }
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_activity_pallet_transfer));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_activity_load_balancing));
     }
 
-        @Override
-        public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         // Honeywell onDestroyView
         if (barcodeReader != null) {
             // unregister barcode event listener honeywell
@@ -1189,7 +1096,7 @@ public void  closefields(){
 
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.ScanDTO, getContext());
-            final ScanDTO scanDTO = new ScanDTO();
+            ScanDTO scanDTO = new ScanDTO();
             scanDTO.setUserID(Userid);
             scanDTO.setAccountID(accountId);
             // scanDTO.setTenantID(String.valueOf(tenantID));
@@ -1199,6 +1106,7 @@ public void  closefields(){
             // scanDTO.setInboundID(inboundId);
             //inboundDTO.setIsOutbound("0");
             message.setEntityObject(scanDTO);
+
 
             Call<String> call = null;
             ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
@@ -1255,16 +1163,14 @@ public void  closefields(){
                             LinkedTreeMap<?, ?> _lResult = new LinkedTreeMap<>();
                             _lResult = (LinkedTreeMap<?, ?>) core.getEntityObject();
 
-                             scanDTOPal = new ScanDTO(_lResult.entrySet());
+                            ScanDTO scanDTO1 = new ScanDTO(_lResult.entrySet());
                             ProgressDialogUtils.closeProgressDialog();
-                            if (scanDTOPal != null) {
+                            if (scanDTO1 != null) {
 
-                                if (scanDTOPal.getScanResult() && !scanDTOPal.isAllocationType()) {
+                                if (scanDTO1.getScanResult()) {
 
                                     if(!isPalletScaned){
-                                        isSKUScanned=true;
                                         isPalletScaned=true;
-                                        isTOContainerScanner=true;
                                         txtFromPallet.setText(scannedData);
                                         cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.white));
                                         ivScanFromCont.setImageResource(R.drawable.check);
@@ -1275,26 +1181,7 @@ public void  closefields(){
                                         ivScanLocation.setImageResource(R.drawable.check);
                                     }
 
-                                }
-                               else if (scanDTOPal.getScanResult() && scanDTOPal.isAllocationType()){
-                                    sku_layout.setVisibility(View.VISIBLE);
-                                    TOcontainer_layout.setVisibility(View.VISIBLE);
-                                    if(!isPalletScaned){
-                                        isPalletScaned=true;
-                                        txtFromPallet.setText(scannedData);
-                                        cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.white));
-                                        ivScanFromCont.setImageResource(R.drawable.check);
-                                        so_number.setVisibility(View.GONE);
-                                      // GetActiveStockData();
-                                     //  GetActiveStock();
-
-                                    }else{
-                                        txtLocation.setText(scannedData);
-                                        cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
-                                        ivScanLocation.setImageResource(R.drawable.check);
-                                    }
-                                }
-                                else  {
+                                } else {
                                     if(!isPalletScaned){
                                         txtFromPallet.setText("");
                                         cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.white));
@@ -1415,9 +1302,9 @@ public void  closefields(){
 
                             if (scanDTO1 != null) {
                                 if (scanDTO1.getScanResult()) {
-                                        txtLocation.setText(scannedData);
-                                        cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
-                                        ivScanLocation.setImageResource(R.drawable.check);
+                                    txtLocation.setText(scannedData);
+                                    cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
+                                    ivScanLocation.setImageResource(R.drawable.check);
 
                                 } else {
 
@@ -1491,43 +1378,19 @@ public void  closefields(){
         }
 
         @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
+        public View getView(int i, View view, ViewGroup viewGroup) {
             LayoutInflater inflater=getActivity().getLayoutInflater();
             View rowView=inflater.inflate(R.layout.sdk_list, null,true);
 
             TextView sku=(TextView)rowView.findViewById(R.id.sku);
             TextView batchno=(TextView)rowView.findViewById(R.id.batchno);
-            final EditText qty=(EditText)rowView.findViewById(R.id.qty);
+            TextView qty=(TextView)rowView.findViewById(R.id.qty);
 
             sku.setText(inventoryDTO_list.get(i).getMaterialCode());
             batchno.setText(inventoryDTO_list.get(i).getBatchNo());
             qty.setText(inventoryDTO_list.get(i).getQuantity());
-            qt = qty.getText().toString();
-            qty.addTextChangedListener(new TextWatcher() {
-
-
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    inventoryDTO_list.get(i).setQuantity(s.toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                   // qt=s.toString();
-                   // qt = qty.getText().toString();
-                    inventoryDTO_list.get(i).setQuantity(s.toString());
-
-                }
-            });
 
             return rowView;
-        }
-        public ArrayList<InventoryDTO> getList() {
-            return (ArrayList<InventoryDTO>) inventoryDTO_list;
         }
     }
 
@@ -1604,10 +1467,7 @@ public void  closefields(){
 
                                 if(lstInventory!=null){
                                     common.showUserDefinedAlertType("Successfully Transfered", getActivity(), getContext(), "Success");
-                                    if (scanDTOPal.isAllocationType()) {
-                                        getTotalPutwayCount();
-                                    }
-
+                                    //  getTotalPutwayCount();
                                     Clearfields();
                                 }else{
                                     common.showUserDefinedAlertType("Error While Tranfer", getActivity(), getContext(), "Error");
@@ -1667,8 +1527,8 @@ public void  closefields(){
 
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
-            final InventoryDTO inventoryDTO = new InventoryDTO();
-            inventoryDTO.setMaterialCode(textFromSku.getText().toString());
+            InventoryDTO inventoryDTO = new InventoryDTO();
+            inventoryDTO.setMaterialCode("");
             inventoryDTO.setLocationCode("");
             inventoryDTO.setContainerCode(txtFromPallet.getText().toString());
             inventoryDTO.setTenantCode(selectedTenant);
@@ -1676,6 +1536,7 @@ public void  closefields(){
             inventoryDTO.setTenantID(tenantId);
             inventoryDTO.setWarehouseId(whId);
             inventoryDTO.setWarehouse(selectedWH);
+            inventoryDTO.setMaterialCode("");
             inventoryDTO.setBatchNo("");
             inventoryDTO.setSerialNo("");
             inventoryDTO.setMfgDate("");
@@ -1740,29 +1601,26 @@ public void  closefields(){
 
                                 List<LinkedTreeMap<?, ?>> _lInventory = new ArrayList<LinkedTreeMap<?, ?>>();
                                 _lInventory = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-                                List<InventoryDTO>   lstInventory = new ArrayList<InventoryDTO>();
+                                List<InventoryDTO> lstInventory = new ArrayList<InventoryDTO>();
 
                                 ProgressDialogUtils.closeProgressDialog();
 
                                 if(_lInventory!=null){
                                     if (_lInventory.size() > 0) {
+
                                         InventoryDTO inventorydto = null;
                                         for (int i = 0; i < _lInventory.size(); i++) {
                                             inventorydto = new InventoryDTO(_lInventory.get(i).entrySet());
-                                         /*   if (inventoryDTO.getResult()){
-                                                sku_layout.setVisibility(View.VISIBLE);
-                                            }*/
-                                            if (inventorydto.getResult().equals("Done")) {
-                                                lstInventory.add(inventorydto);
-                                                sug_loc.setText(lstInventory.get(0).getDisplayLocation());
-                                                loadList(lstInventory);
-                                            }
+                                            //   if (inventorydto.getResult().equals("Done")) {
+                                            lstInventory.add(inventorydto);
+                                           /* }
                                             else {
                                                 common.showUserDefinedAlertType(inventorydto.getResult(), getActivity(), getContext(), "Error");
-                                            }
+                                            }*/
+                                        }
+                                        //  sug_loc.setText(lstInventory.get(0).getDisplayLocation());
 
-                                            }
-
+                                        loadList(lstInventory);
 
 
 
@@ -1882,13 +1740,11 @@ public void  closefields(){
 
                                 Log.v("ABCDE",new Gson().toJson(core.getEntityObject()));
 
-                               LinkedTreeMap<?, ?> _lInventory = new LinkedTreeMap<>();
+                                LinkedTreeMap<?, ?> _lInventory = new LinkedTreeMap<>();
                                 _lInventory = (LinkedTreeMap<?, ?>) core.getEntityObject();
                                 ProgressDialogUtils.closeProgressDialog();
-                               String putway =  _lInventory.get("PutwayCount").toString();
-                                    so_number.setText(putway);
-
-
+                                String putway =  _lInventory.get("PutwayCount").toString();
+                                so_number.setText(putway);
                             }
                         } else {
                             ProgressDialogUtils.closeProgressDialog();
@@ -1976,42 +1832,31 @@ public void  closefields(){
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
 
-                                if (response.body()!=null) {
-                                    String responseBody = response.body().toString();
-                                    JSONArray jsonarray = null;
-                                    List createNumList = new ArrayList<String>();
-                                    try {
-                                        jsonarray = new JSONArray(responseBody);
+                        if (response.body()!=null) {
+                            String responseBody = response.body().toString();
+                            JSONArray jsonarray = null;
+                            List createNumList = new ArrayList<String>();
+                            try {
+                                jsonarray = new JSONArray(responseBody);
 
-                                    for (int i = 0; i < jsonarray.length(); i++) {
-                                        JSONObject jsonobject = jsonarray.getJSONObject(i);
-                                        createNumList.add(jsonobject.getString("CrateNo"));
-
-
-                                    }
-                                        ProgressDialogUtils.closeProgressDialog();
-                                    if (createNumList.size()>0) {
-                                        crateDialog(createNumList);
-                                    }
-                                    else {
-                                        ProgressDialogUtils.closeProgressDialog();
-                                        common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
-                                    }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        ProgressDialogUtils.closeProgressDialog();
-                                        common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
+                                for (int i = 0; i < jsonarray.length(); i++) {
+                                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+                                    createNumList.add(jsonobject.getString("CrateNo"));
 
 
-                                    }
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+                                crateDialog(createNumList);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
 
                     }
 
-                            }
-
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        ProgressDialogUtils.closeProgressDialog();
 
                         Toast.makeText(getActivity(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                     }
@@ -2192,738 +2037,5 @@ public void  closefields(){
     }
 
 
-    public void shipMentClosed() {
-        try {
 
-            WMSCoreMessage message = new WMSCoreMessage();
-            message = common.SetAuthentication(EndpointConstants.Inbound, getContext());
-            InboundDTO inboundDTO = new InboundDTO();
-
-            inboundDTO.setInboundID(inboundId);
-            message.setEntityObject(inboundDTO);
-
-            Call<String> call = null;
-            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-            try {
-                //Checking for Internet Connectivity
-                // if (NetworkUtils.isInternetAvailable()) {
-                // Calling the Interface method
-                ProgressDialogUtils.showProgressDialog("Please Wait");
-                call = apiService.ShipmentClosed(message);
-                // } else {
-                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
-                // return;
-                // }
-
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ProgressDialogUtils.closeProgressDialog();
-                common.showUserDefinedAlertType(errorMessages.EMC_0002, getActivity(), getContext(), "Error");
-            }
-            try {
-                //Getting response from the method
-                call.enqueue(new Callback<String>() {
-
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.body() != null) {
-                            core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-                            if ((core.getType().toString().equals("Exception"))) {
-                                List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
-                                _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
-                                WMSExceptionMessage owmsExceptionMessage = null;
-
-                                for (int i = 0; i < _lExceptions.size(); i++) {
-
-                                    owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
-                                }
-
-                                ProgressDialogUtils.closeProgressDialog();
-                                common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
-                            } else {
-
-                                Log.v("ABCDE",new Gson().toJson(core.getEntityObject()));
-
-                                LinkedTreeMap<?, ?> _lInventory = new LinkedTreeMap<>();
-                                _lInventory = (LinkedTreeMap<?, ?>) core.getEntityObject();
-                                String putway =  _lInventory.get("message").toString();
-                                InboundDTO lstInventory = new InboundDTO();
-
-                                if(lstInventory!=null){
-                                    common.showUserDefinedAlertType(putway, getActivity(), getContext(), "Success");
-                                   // getTotalPutwayCount();
-                                    //Clearfields();
-                                }else{
-                                    common.showUserDefinedAlertType("Error While Shipment", getActivity(), getContext(), "Error");
-                                }
-
-
-                                ProgressDialogUtils.closeProgressDialog();
-                            }
-                        } else {
-                            ProgressDialogUtils.closeProgressDialog();
-                            common.showUserDefinedAlertType(errorMessages.EMC_0021, getActivity(), getContext(), "Error");
-
-                            return;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable throwable) {
-
-                        ProgressDialogUtils.closeProgressDialog();
-                        common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-
-                        return;
-                    }
-                });
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                sku_list.setAdapter(null);
-                ProgressDialogUtils.closeProgressDialog();
-                common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-
-
-            }
-        } catch (Exception ex) {
-            try {
-                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
-                logException();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            ProgressDialogUtils.closeProgressDialog();
-            common.showUserDefinedAlertType(errorMessages.EMC_0003, getActivity(), getContext(), "Error");
-            return;
-        }
-
-    }
-  public void GetActivestockSKU(){
-
-
-      try {
-
-          WMSCoreMessage message = new WMSCoreMessage();
-          message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
-          final InventoryDTO inventoryDTO = new InventoryDTO();
-          inventoryDTO.setMaterialCode(textFromSku.getText().toString());
-          inventoryDTO.setLocationCode("");
-          inventoryDTO.setContainerCode(txtFromPallet.getText().toString());
-          inventoryDTO.setTenantCode(selectedTenant);
-          inventoryDTO.setAccountID(accountId);
-          inventoryDTO.setTenantID(tenantId);
-          inventoryDTO.setWarehouseId(whId);
-          inventoryDTO.setWarehouse(selectedWH);
-          inventoryDTO.setBatchNo("");
-          inventoryDTO.setSerialNo("");
-          inventoryDTO.setMfgDate("");
-          inventoryDTO.setExpDate("");
-          inventoryDTO.setProjectNo("");
-          inventoryDTO.setMRP("");
-          inventoryDTO.setInboundID(inboundId);
-          message.setEntityObject(inventoryDTO);
-
-          Call<String> call = null;
-          ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-
-          try {
-              //Checking for Internet Connectivity
-              // if (NetworkUtils.isInternetAvailable()) {
-              // Calling the Interface method
-              ProgressDialogUtils.showProgressDialog("Please Wait");
-              call = apiService.GetActivestockSKU(message);
-              // } else {
-              // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
-              // return;
-              // }
-
-          } catch (Exception ex) {
-              try {
-                  exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
-                  logException();
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-              ProgressDialogUtils.closeProgressDialog();
-              common.showUserDefinedAlertType(errorMessages.EMC_0002, getActivity(), getContext(), "Error");
-          }
-          try {
-              //Getting response from the method
-              call.enqueue(new Callback<String>() {
-
-                  @Override
-                  public void onResponse(Call<String> call, Response<String> response) {
-                      if (response.body() != null) {
-                         /* try {
-                              JSONObject json = new JSONObject(response.body().toString());
-                              String table =json.getString("EntityObject");
-                              JSONObject Table = new JSONObject(table);
-                              JSONArray f =  Table.getJSONArray("Table");
-                              //JsonArray s
-                              int n;
-
-                              for (int i = 0; i < f.length(); ++i) {
-                                  JSONObject rec = f.getJSONObject(i);
-
-                                 s = rec.getString("S");
-                                //* n = rec.getInt("N");
-                                  System.out.println(s);//*
-                              }
-
-
-
-                          }catch (Exception e){
-                              e.printStackTrace();
-                          }*/
-
-                         //if (s.equalsIgnoreCase("Done")) {
-                              core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-                              if ((core.getType().toString().equals("Exception"))) {
-                                  List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
-                                  _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
-                                  WMSExceptionMessage owmsExceptionMessage = null;
-
-                                  for (int i = 0; i < _lExceptions.size(); i++) {
-
-                                      owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
-                                  }
-
-                                  sku_list.setAdapter(null);
-
-                                  ProgressDialogUtils.closeProgressDialog();
-                                  common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
-                              } else {
-
-
-                                  /*List<LinkedTreeMap<?, ?>> _lInventory = new ArrayList<LinkedTreeMap<?, ?>>();
-                                  _lInventory = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();*/
-                                  List<InventoryDTO> lstInventory = new ArrayList<InventoryDTO>();
-                                  List createNumList = new ArrayList<String>();
-                                  try {
-                                      JSONObject json = new JSONObject(response.body().toString());
-                                      String table =json.getString("EntityObject");
-                                      JSONObject Table = new JSONObject(table);
-                                      JSONArray f =  Table.getJSONArray("Table");
-                                      //JsonArray s
-                                      int n;
-
-                                      for (int i = 0; i < f.length(); ++i) {
-                                          JSONObject rec = f.getJSONObject(i);
-
-
-
-                                          if(rec.getString("N").equalsIgnoreCase("-1")){
-                                              common.showUserDefinedAlertType(rec.getString("S"), getActivity(), getContext(), "Error");
-                                              cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                                              ivScansku.setImageResource(R.drawable.fullscreen_img);
-                                              isSKUScanned=false;
-                                              textFromSku.setText("");
-                                              ProgressDialogUtils.closeProgressDialog();
-                                              return;
-
-                                          }else {
-                                             /* InventoryDTO inventory = null;
-                                              String json_string = new Gson().toJson(rec);
-
-                                              InventoryDTO obj = new Gson().fromJson(json_string, InventoryDTO.class);*/
-                                              InventoryDTO obj = new Gson().fromJson(rec.toString(), InventoryDTO.class);
-                                              lstInventory.add(obj);
-                                             /* obj.getMaterialCode();
-                                              createNumList.add(rec.getString("MaterialCode"));
-                                              createNumList.add(rec.getString("DisplayLocationCode"));
-                                              createNumList.add(rec.getInt("Quantity"));
-                                              createNumList.add(rec.getString("S"));*/
-                                          }
-
-                                      }
-
-
-
-                                  }catch (Exception e){
-                                      e.printStackTrace();
-                                  }
-
-                                  ProgressDialogUtils.closeProgressDialog();
-
-                                  if (lstInventory!=null){
-                                      if (lstInventory.size()>0){
-                                          //if(lstInventory.get(0).equals("Done")){
-                                              sug_loc.setText(lstInventory.get(0).getDisplayLocationCode());
-                                              loadList(lstInventory);
-                                          //}
-                                          /*else {
-                                              common.showUserDefinedAlertType(createNumList.get(3).toString(), getActivity(), getContext(), "Error");
-                                          }*/
-
-                                      }
-                                      else {
-                                          ProgressDialogUtils.closeProgressDialog();
-                                          sku_list.setAdapter(null);
-                                          cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                                          ivScansku.setImageResource(R.drawable.fullscreen_img);
-                                          isSKUScanned=false;
-                                          textFromSku.setText("");
-                                          common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                      }
-                                  }
-                                  else {
-                                      ProgressDialogUtils.closeProgressDialog();
-                                      sku_list.setAdapter(null);
-                                      common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                      cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                                      ivScansku.setImageResource(R.drawable.fullscreen_img);
-                                      isSKUScanned=false;
-                                      textFromSku.setText("");
-                                  }
-
-                                 /* if (_lInventory != null) {
-                                      if (_lInventory.size() > 0) {
-                                          InventoryDTO inventorydto = null;
-                                          for (int i = 0; i < _lInventory.size(); i++) {
-                                              inventorydto = new InventoryDTO(_lInventory.get(i).entrySet());
-                                         *//*   if (inventoryDTO.getResult()){
-                                                sku_layout.setVisibility(View.VISIBLE);
-                                            }*//*
-                                              // if (inventorydto.getResult().equals("Done")) {
-                                              lstInventory.add(inventorydto);
-                                              sug_loc.setText(lstInventory.get(0).getDisplayLocation());
-                                              loadList(lstInventory);
-                                              // }
-                                         *//* else {
-                                              common.showUserDefinedAlertType(inventorydto.getResult(), getActivity(), getContext(), "Error");
-                                          }*//*
-
-                                          }
-
-
-                                      } else {
-                                          sku_list.setAdapter(null);
-                                          common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                      }
-                                  } else {
-                                      sku_list.setAdapter(null);
-                                      common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                  }*/
-                              }
-                         // }
-                          /*{
-                              common.showUserDefinedAlertType(s, getActivity(), getContext(), "Error");
-                              ProgressDialogUtils.closeProgressDialog();
-                              cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                              ivScansku.setImageResource(R.drawable.fullscreen_img);
-                              isSKUScanned=false;
-                              textFromSku.setText("");
-                          }*/
-                      } else {
-                          sku_list.setAdapter(null);
-                          ProgressDialogUtils.closeProgressDialog();
-                          common.showUserDefinedAlertType(errorMessages.EMC_0021, getActivity(), getContext(), "Error");
-                          return;
-                      }
-                  }
-
-                  @Override
-                  public void onFailure(Call<String> call, Throwable throwable) {
-                      sku_list.setAdapter(null);
-                      ProgressDialogUtils.closeProgressDialog();
-                      common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-                      return;
-                  }
-              });
-          } catch (Exception ex) {
-              try {
-                  exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
-                  logException();
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-
-              sku_list.setAdapter(null);
-              ProgressDialogUtils.closeProgressDialog();
-              common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-
-
-          }
-      } catch (Exception ex) {
-          try {
-              exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
-              logException();
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
-
-          ProgressDialogUtils.closeProgressDialog();
-          common.showUserDefinedAlertType(errorMessages.EMC_0003, getActivity(), getContext(), "Error");
-          return;
-      }
-
-  }
-    /*public void GetActiveStock() {
-
-        try {
-
-            WMSCoreMessage message = new WMSCoreMessage();
-            message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
-            final InventoryDTO inventoryDTO = new InventoryDTO();
-            inventoryDTO.setMaterialCode(textFromSku.getText().toString());
-            inventoryDTO.setLocationCode("");
-            inventoryDTO.setContainerCode(txtFromPallet.getText().toString());
-            inventoryDTO.setTenantCode(selectedTenant);
-            inventoryDTO.setAccountID(accountId);
-            inventoryDTO.setTenantID(tenantId);
-            inventoryDTO.setWarehouseId(whId);
-            inventoryDTO.setWarehouse(selectedWH);
-            inventoryDTO.setBatchNo("");
-            inventoryDTO.setSerialNo("");
-            inventoryDTO.setMfgDate("");
-            inventoryDTO.setExpDate("");
-            inventoryDTO.setProjectNo("");
-            inventoryDTO.setMRP("");
-            inventoryDTO.setInboundID(inboundId);
-            message.setEntityObject(inventoryDTO);
-
-
-            Call<String> call = null;
-            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-
-            try {
-                //Checking for Internet Connectivity
-                // if (NetworkUtils.isInternetAvailable()) {
-                // Calling the Interface method
-                ProgressDialogUtils.showProgressDialog("Please Wait");
-                call = apiService.GetActivestock(message);
-                // } else {
-                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
-                // return;
-                // }
-
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ProgressDialogUtils.closeProgressDialog();
-                common.showUserDefinedAlertType(errorMessages.EMC_0002, getActivity(), getContext(), "Error");
-            }
-            try {
-                //Getting response from the method
-                call.enqueue(new Callback<String>() {
-
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.body() != null) {
-                            core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-                            if ((core.getType().toString().equals("Exception"))) {
-                                List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
-                                _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
-                                WMSExceptionMessage owmsExceptionMessage = null;
-
-                                for (int i = 0; i < _lExceptions.size(); i++) {
-
-                                    owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
-                                }
-
-                                sku_list.setAdapter(null);
-
-                                ProgressDialogUtils.closeProgressDialog();
-                                common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
-                            } else {
-
-
-                                List<LinkedTreeMap<?, ?>> _lInventory = new ArrayList<LinkedTreeMap<?, ?>>();
-                                _lInventory = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-                                lstInventory = new ArrayList<InventoryDTO>();
-
-                                ProgressDialogUtils.closeProgressDialog();
-
-                                if(_lInventory!=null){
-                                    if (_lInventory.size() > 0) {
-                                        InventoryDTO inventorydto = null;
-                                        for (int i = 0; i < _lInventory.size(); i++) {
-                                            inventorydto = new InventoryDTO(_lInventory.get(i).entrySet());
-                                         *//*   if (inventoryDTO.getResult()){
-                                                sku_layout.setVisibility(View.VISIBLE);
-                                            }*//*
-                                          *//*  if (inventorydto.getResult().equals("Done")) {*//*
-                                                lstInventory.add(inventorydto);
-                                               // sug_loc.setText(lstInventory.get(0).getDisplayLocation());
-                                                loadList(lstInventory);
-                                            }
-                                            else {
-                                                common.showUserDefinedAlertType(inventorydto.getResult(), getActivity(), getContext(), "Error");
-                                            }
-
-                                        }
-
-
-
-
-
-                                    } else {
-                                        sku_list.setAdapter(null);
-                                        common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                    }
-                                }else{
-                                    sku_list.setAdapter(null);
-                                    common.showUserDefinedAlertType(errorMessages.EMC_0060, getActivity(), getContext(), "Warning");
-                                }
-                            }
-                        } else {
-                            sku_list.setAdapter(null);
-                            ProgressDialogUtils.closeProgressDialog();
-                            common.showUserDefinedAlertType(errorMessages.EMC_0021, getActivity(), getContext(), "Error");
-                            return;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable throwable) {
-                        sku_list.setAdapter(null);
-                        ProgressDialogUtils.closeProgressDialog();
-                        common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-                        return;
-                    }
-                });
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                sku_list.setAdapter(null);
-                ProgressDialogUtils.closeProgressDialog();
-                common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
-
-
-            }
-        } catch (Exception ex) {
-            try {
-                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
-                logException();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            ProgressDialogUtils.closeProgressDialog();
-            common.showUserDefinedAlertType(errorMessages.EMC_0003, getActivity(), getContext(), "Error");
-            return;
-        }
-    }*/
-    public void UpsertBinToBinTransfer() {
-        try {
-
-            WMSCoreMessage message = new WMSCoreMessage();
-            message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
-            InventoryDTO inventoryDTO = new InventoryDTO();
-            inventoryDTO.setLocationCode("DIN0001");
-            inventoryDTO.setToLocationCode(txtLocation.getText().toString());
-            inventoryDTO.setContainerCode(txtFromPallet.getText().toString());
-            inventoryDTO.setToContainerCode(textScanTocontiner.getText().toString());
-            inventoryDTO.setTenantCode(selectedTenant);
-            inventoryDTO.setAccountID(accountId);
-            inventoryDTO.setTenantID(tenantId);
-            inventoryDTO.setWarehouseId(whId);
-            inventoryDTO.setWarehouse(selectedWH);
-            List<InventoryDTO> invList = adapter.getList();
-            for (int i=0;i<invList.size();i++)
-            {
-                qq =invList.get(i).getQuantity();
-
-            }
-           inventoryDTO.setQuantity(qq);
-            inventoryDTO.setMaterialCode(textFromSku.getText().toString());
-          /*  int size = adapter.getCount();
-            String s =null;
-             s= (String) sku_list.getAdapter().getItem(2);*/
-            /*for(int i=0;i<=size;i++){
-                //person = (PersonModel) customAdapter.getItem(i);
-
-               String s = sku_list.getAdapter().getItem(i)
-                person = ((CustomAdapter) simpleList.getAdapter()).getItem(i);
-                Log.d("ABCD",person.toString());
-            }*/
-            /*if (storageloc.equalsIgnoreCase("SLOC")) {
-                if (!isSKUScanned) {
-                    inventoryDTO.setSLOC("");
-                } else {
-                    common.showUserDefinedAlertType(errorMessages.EMC_0052, getActivity(), getContext(), "Warning");
-                    return;
-                }
-            } else {
-                inventoryDTO.setSLOC(storageloc);
-            }*/
-           // inventoryDTO.setMRP(lblMRP.getText().toString());
-            inventoryDTO.setTenantID("308");
-            inventoryDTO.setWarehouseId(whId);
-            message.setEntityObject(inventoryDTO);
-
-            Call<String> call = null;
-            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-            try {
-                //Checking for Internet Connectivity
-                // if (NetworkUtils.isInternetAvailable()) {
-                // Calling the Interface method
-                ProgressDialogUtils.showProgressDialog("Please Wait");
-                call = apiService.UpsertBinToBinTransferItem(message);
-                // } else {
-                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
-                // return;
-                // }
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "004_01", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ProgressDialogUtils.closeProgressDialog();
-                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
-            }
-            try {
-                //Getting response from the method
-                call.enqueue(new Callback<String>() {
-
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                        try {
-                            if (response.body() != null) {
-                                core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-                                if ((core.getType().toString().equals("Exception"))) {
-                                    List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
-                                    _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-                                    WMSExceptionMessage owmsExceptionMessage = null;
-                                    for (int i = 0; i < _lExceptions.size(); i++) {
-                                        owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-                                        ProgressDialogUtils.closeProgressDialog();
-                                        common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
-                                        return;
-                                    }
-                                } else {
-
-                                    List<LinkedTreeMap<?, ?>> _lResult = new ArrayList<LinkedTreeMap<?, ?>>();
-                                    _lResult = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
-                                    InventoryDTO dto = null;
-                                    ProgressDialogUtils.closeProgressDialog();
-
-                                   for (int i = 0; i < _lResult.size(); i++) {
-
-                                        dto = new InventoryDTO(_lResult.get(i).entrySet());
-
-                                        if (dto.getResult().equals("1")) {
-                                             Clearfields();
-                                            // Clearing data after completion of transfer
-
-                                            // From location is not cleared here as per requirement
-
-                                           /* cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.skuColor));
-                                            ivScanSku.setImageResource(R.drawable.fullscreen_img);
-
-                                            cvScanToCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                                            ivScanToCont.setImageResource(R.drawable.fullscreen_img);
-
-                                            cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
-                                            ivScanFromCont.setImageResource(R.drawable.fullscreen_img);
-
-                                            cvScanToLoc.setCardBackgroundColor(getResources().getColor(R.color.locationColor));
-                                            ivScanToLoc.setImageResource(R.drawable.fullscreen_img);
-
-                                            etLocationTo.setText("");
-                                            etPalletFrom.setText("");
-                                            etPalletTo.setText("");
-                                            etSku.setText("");
-                                            etQty.setText("");
-
-                                            lblBatchNo.setText("");
-                                            lblserialNo.setText("");
-                                            lblExpDate.setText("");
-                                            lblMfgDate.setText("");
-                                            lblProjectRefNo.setText("");
-                                            lblMRP.setText("");
-                                            etQty.setText("");
-
-                                            isSKUScanned = false;
-                                            isPalletScaned = false;*/
-
-                                          //  GetBinToBinStorageLocations();
-
-                                            soundUtils.alertSuccess(getActivity(), getContext());
-
-                                            return;
-
-                                        } else {
-                                            common.showUserDefinedAlertType(dto.getResult(), getActivity(), getContext(), "Error");
-                                            ProgressDialogUtils.closeProgressDialog();
-                                        }
-
-                                    }
-
-                                }
-                            }
-                            ProgressDialogUtils.closeProgressDialog();
-                            closefields();
-                        } catch (Exception ex) {
-                            try {
-                                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "004_02", getActivity());
-                                logException();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            ProgressDialogUtils.closeProgressDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable throwable) {
-                        //Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
-                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-                    }
-                });
-            } catch (Exception ex) {
-                try {
-                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "004_03", getActivity());
-                    logException();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ProgressDialogUtils.closeProgressDialog();
-                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
-            }
-        } catch (Exception ex) {
-            try {
-                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "004_04", getActivity());
-                logException();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ProgressDialogUtils.closeProgressDialog();
-            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
-        }
-    }
 }

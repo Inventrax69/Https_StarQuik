@@ -33,6 +33,7 @@ import com.inventrax.starquik.fragments.GoodsInFragment;
 import com.inventrax.starquik.fragments.HomeFragment;
 import com.inventrax.starquik.fragments.InternalTransferFragment;
 import com.inventrax.starquik.fragments.LiveStockFragment;
+import com.inventrax.starquik.fragments.LoadBalanceingFragment;
 import com.inventrax.starquik.fragments.LoadGenerationFragment;
 import com.inventrax.starquik.fragments.LoadSheetFragment;
 import com.inventrax.starquik.fragments.LoadingFragment;
@@ -248,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements DrawerFragment.Fr
                 }
                 if (fragment != null && fragment.isVisible() && fragment instanceof InternalTransferFragment) {
                     ((InternalTransferFragment) fragment).myScannedData(MainActivity.this, ScannedData);
+                }
+                if (fragment != null && fragment.isVisible() && fragment instanceof LoadBalanceingFragment) {
+                    ((LoadBalanceingFragment) fragment).myScannedData(MainActivity.this, ScannedData);
                 }
             }
         }
