@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cipherlab.barcode.GeneralString;
 import com.google.gson.Gson;
@@ -332,7 +333,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                 break;
 
             case R.id.btnConfirm:
-                if (!materialCode.equals("")) {
+
                     if (etCCQty.getText().toString().isEmpty()) {
                         common.showUserDefinedAlertType("Please enter quantity", getActivity(), getContext(), "Error");
                         return;
@@ -357,10 +358,6 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                         });
 
                     }
-                } else {
-                    common.showUserDefinedAlertType(errorMessages.EMC_0065, getActivity(), getContext(), "Error");
-                    return;
-                }
                 break;
 
             case R.id.btnCloseExport:
@@ -1053,7 +1050,9 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                     public void onResponse(Call<String> call, Response<String> response) {
 
                         try {
-
+                               if (response.body()==null){
+                                   Toast.makeText(getContext(),"error body",Toast.LENGTH_LONG).show();
+                               }
                             core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
                             if ((core.getType().toString().equals("Exception"))) {
                                 List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
@@ -1108,7 +1107,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                                         ormpartnumber.setText("");
                                         soundUtils.alertSuccess(getActivity(), getContext());
 
-                                        etCCQty.setEnabled(false);
+                                        etCCQty.setEnabled(true);
                                         etCCQty.clearFocus();
 
                                         getSLocs();

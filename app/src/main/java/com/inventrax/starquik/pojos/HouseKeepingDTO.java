@@ -25,6 +25,10 @@ public class HouseKeepingDTO {
     private String CartonNo;
     @SerializedName("Result")
     private String Result;
+    @SerializedName("Location")
+    private String Location;
+    @SerializedName("CrateCode")
+    private String CrateCode;
 
 
     public HouseKeepingDTO() {
@@ -73,6 +77,16 @@ public class HouseKeepingDTO {
                 case "UserId":
                     if (entry.getValue() != null) {
                         this.setUserId(entry.getValue().toString());
+                    }
+                    break;
+                case "Location":
+                    if (entry.getValue() != null) {
+                        this.setLocation(entry.getValue().toString());
+                    }
+                    break;
+                case "CrateCode":
+                    if (entry.getValue() != null) {
+                        this.setCrateCode(entry.getValue().toString());
                     }
                     break;
 
@@ -144,5 +158,21 @@ public class HouseKeepingDTO {
 
     public void setUserId(String userId) {
         UserId = userId;
+    }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
+    }
+
+    public String getCrateCode() {
+        return CrateCode;
+    }
+
+    public void setCrateCode(String crateCode) {
+        CrateCode = crateCode;
     }
 }

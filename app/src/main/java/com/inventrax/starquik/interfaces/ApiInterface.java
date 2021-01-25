@@ -172,6 +172,9 @@ public interface ApiInterface {
 
     @POST("Transfers/TransferPalletToLocation")
     Call<String> TransferPalletToLocation(@Body WMSCoreMessage oRequest);
+    @POST("Transfers/PalletTransferLoadBalancing")
+    Call<String> PalletTransferLoadBalancing(@Body WMSCoreMessage oRequest);
+
 
     @POST("Outbound/CheckStrickyCompliance")
     Call<String> CheckStrickyCompliance(@Body WMSCoreMessage oRequest);
@@ -276,5 +279,8 @@ public interface ApiInterface {
 
     @POST("Transfers/GetMissingCrates")
     Call<String> GetMissingCrates(@Body WMSCoreMessage oRequest);
+
+    @POST("HouseKeeping/GetLoadBalancingLocations")
+    Call<String> GetLoadBalancingLocations(@Body WMSCoreMessage oRequest);
 
 }

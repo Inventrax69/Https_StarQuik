@@ -110,7 +110,7 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
     private String selectedTenant = "", selectedWH = "", tenantId = "", whId = "";
     List<HouseKeepingDTO> lstTenants = null;
     List<HouseKeepingDTO> lstWarehouse = null;
-    TextView txtWarehousetName,txtTendentName,txtFromPallet,txtLocation,so_number;
+    TextView txtWarehousetName,txtTendentName,txtFromPallet,txtLocation,so_number,txt_locationname,txt_crate;
     TextInputEditText sug_loc;
     ListView sku_list;
     SDKAdapter adapter;
@@ -118,6 +118,8 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
     private String Storerefno = null,inboundId = null;
     ArrayAdapter madapter;
     ListView listView;
+    List<String> _lstLocation;
+    List<String> _lstCrate;
 
 
     // Cipher Barcode Scanner
@@ -167,6 +169,8 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
         ivScanFromCont = (ImageView) rootView.findViewById(R.id.ivScanFromCont);
         ivScanLocation = (ImageView) rootView.findViewById(R.id.ivScanLocation);
         so_number = (TextView) rootView.findViewById(R.id.so_number);
+        txt_locationname = (TextView) rootView.findViewById(R.id.txt_locationname);
+        txt_crate = (TextView) rootView.findViewById(R.id.txt_crate);
         txtWarehousetName = (TextView) rootView.findViewById(R.id.txtWarehousetName);
         txtTendentName = (TextView) rootView.findViewById(R.id.txtTendentName);
 
@@ -293,9 +297,8 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
                     getInboundId();
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
-                    btnBinComplete.setEnabled(false);
+                    GetLoadBalancingLocations();
                     //getTotalPutwayCount();
-
                     // method to get the storage locations
                 } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0011, getActivity(), getContext(), "Error");
@@ -303,15 +306,18 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
                 break;
 
             case R.id.btnBinComplete:
-                if(!txtLocation.getText().toString().isEmpty()){
-                    TransferPalletToLocation();
-
-                }else{
+                if (txtFromPallet.getText().toString().equals(txt_crate.getText().toString())){
+                    PalletTransferLoadBalancing();
+            }
+                else {
+                    common.showUserDefinedAlertType("Please scan Valid Crate ", getActivity(), getContext(), "Error");
+                }
+                /*else{
                     if(!isPalletScaned)
                         common.showUserDefinedAlertType("Please scan pallet", getActivity(), getContext(), "Error");
                     else
                         common.showUserDefinedAlertType("Please scan Location", getActivity(), getContext(), "Error");
-                }
+                }*/
                 break;
             case R.id.btn_export:
                 //getMissingCrates();
@@ -1395,13 +1401,13 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
     }
 
 
-    public void TransferPalletToLocation() {
+    public void PalletTransferLoadBalancing() {
         try {
 
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
             InventoryDTO inventoryDTO = new InventoryDTO();
-            inventoryDTO.setLocationCode(txtLocation.getText().toString());
+            //inventoryDTO.setLocationCode(txtLocation.getText().toString());
             inventoryDTO.setContainerCode(txtFromPallet.getText().toString());
             inventoryDTO.setTenantCode(selectedTenant);
             inventoryDTO.setAccountID(accountId);
@@ -1417,7 +1423,7 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
                 // if (NetworkUtils.isInternetAvailable()) {
                 // Calling the Interface method
                 ProgressDialogUtils.showProgressDialog("Please Wait");
-                call = apiService.TransferPalletToLocation(message);
+                call = apiService.PalletTransferLoadBalancing(message);
                 // } else {
                 // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
                 // return;
@@ -1462,13 +1468,24 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
 
                                 LinkedTreeMap<?, ?> _lInventory = new LinkedTreeMap<>();
                                 _lInventory = (LinkedTreeMap<?, ?>) core.getEntityObject();
-
+                                InventoryDTO inventorydto = null;
+                                for (int i = 0; i < _lInventory.size(); i++) {
+                                    inventorydto = new InventoryDTO(_lInventory.entrySet());
+                                }
                                 InventoryDTO lstInventory = new InventoryDTO();
 
-                                if(lstInventory!=null){
+                                if(inventorydto.getResult().equals("1.0")){
                                     common.showUserDefinedAlertType("Successfully Transfered", getActivity(), getContext(), "Success");
                                     //  getTotalPutwayCount();
-                                    Clearfields();
+                                    cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
+                                    ivScanFromCont.setImageResource(R.drawable.fullscreen_img);
+                                    isPalletScaned = false;
+                                    txtFromPallet.setText("");
+                                    txt_locationname.setText("");
+                                    txt_crate.setText("");
+                                   // Clearfields();
+
+                                    GetLoadBalancingLocations();
                                 }else{
                                     common.showUserDefinedAlertType("Error While Tranfer", getActivity(), getContext(), "Error");
                                 }
@@ -2029,10 +2046,170 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
     public void getInboundId() {
         for (InboundDTO oInbound : lstInbound) {
             if (oInbound.getStoreRefNo().equals(Storerefno)) {                // Gets selected inbound id of ref# from the list
-                // if the selected ref# equals
+                // if the selected ref# equalsp
                 // to the list of ref no
                 inboundId = oInbound.getInboundID();
             }
+        }
+    }
+
+
+    public void GetLoadBalancingLocations() {
+
+        try {
+
+
+            WMSCoreMessage message = new WMSCoreMessage();
+            message = common.SetAuthentication(EndpointConstants.HouseKeepingDTO, getContext());
+            HouseKeepingDTO houseKeepingDTO = new HouseKeepingDTO();
+            houseKeepingDTO.setAccountID(accountId);
+            houseKeepingDTO.setUserId(Userid);
+            houseKeepingDTO.setTenantID(tenantId);
+            message.setEntityObject(houseKeepingDTO);
+
+
+            Call<String> call = null;
+            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
+
+            try {
+                //Checking for Internet Connectivity
+                // if (NetworkUtils.isInternetAvailable()) {
+                // Calling the Interface method
+                call = apiService.GetLoadBalancingLocations(message);
+                ProgressDialogUtils.showProgressDialog("Please Wait");
+                // } else {
+                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
+                // return;
+
+                // }
+
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0002);
+
+            }
+            try {
+                //Getting response from the method
+                call.enqueue(new Callback<String>() {
+
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        try {
+
+                            core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
+                            if ((core.getType().toString().equals("Exception"))) {
+                                List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
+                                _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+
+                                WMSExceptionMessage owmsExceptionMessage = null;
+                                for (int i = 0; i < _lExceptions.size(); i++) {
+
+                                    owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
+
+
+                                }
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
+                            } else {
+                                List<HouseKeepingDTO> lstHousekeeping = new ArrayList<HouseKeepingDTO>();
+                               _lstLocation = new ArrayList<>();
+                                _lstCrate = new ArrayList<>();
+
+                                JSONObject json = new JSONObject(response.body().toString());
+                                String table =json.getString("EntityObject");
+                                JSONObject Table = new JSONObject(table);
+                                JSONArray f =  Table.getJSONArray("Table");
+                                for (int i = 0; i < f.length(); ++i) {
+                                    JSONObject rec = f.getJSONObject(i);
+                                    HouseKeepingDTO obj = new Gson().fromJson(rec.toString(), HouseKeepingDTO.class);
+                                    lstHousekeeping.add(obj);
+                                }
+                        if(lstHousekeeping.size() > 0) {
+                            for (int i = 0; i < lstHousekeeping.size(); i++) {
+
+                                // List of store ref no.
+                                _lstLocation.add(lstHousekeeping.get(i).getLocation());
+                                _lstCrate.add(lstHousekeeping.get(i).getCrateCode());
+
+                            }
+                            txt_locationname.setText(_lstLocation.get(0));
+                            txt_crate.setText(_lstCrate.get(0));
+                        }else {
+                            common.showUserDefinedAlertType("No Empty Crates  available", getActivity(), getContext(), "Error");
+                        }
+                               /* List<LinkedTreeMap<?, ?>> _lstActiveStock = new ArrayList<LinkedTreeMap<?, ?>>();
+                                _lstActiveStock = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
+
+                                List<HouseKeepingDTO> lstDto = new ArrayList<HouseKeepingDTO>();
+                                List<String> _lstStock = new ArrayList<>();
+
+                                ProgressDialogUtils.closeProgressDialog();
+
+                                for (int i = 0; i < _lstActiveStock.size(); i++) {
+                                    HouseKeepingDTO dto = new HouseKeepingDTO(_lstActiveStock.get(i).entrySet());
+                                    lstDto.add(dto);
+                                    lstWarehouse.add(dto);
+                                }
+
+                                for (int i = 0; i < lstDto.size(); i++) {
+
+                                    _lstStock.add(lstDto.get(i).getWarehouse());
+
+                                }
+
+
+                                ArrayAdapter liveStockAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, _lstStock);
+                                spinnerSelectWarehouse.setAdapter(liveStockAdapter);
+*/
+                                ProgressDialogUtils.closeProgressDialog();
+                            }
+                        } catch (Exception ex) {
+                            try {
+                                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
+                                logException();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            ProgressDialogUtils.closeProgressDialog();
+                        }
+
+
+                    }
+
+                    // response object fails
+                    @Override
+                    public void onFailure(Call<String> call, Throwable throwable) {
+                        //Toast.makeText(LoginActivity.this, throwable.toString(), Toast.LENGTH_LONG).show();
+                        ProgressDialogUtils.closeProgressDialog();
+                        DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+                    }
+                });
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
+            }
+        } catch (Exception ex) {
+            try {
+                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_04", getActivity());
+                logException();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ProgressDialogUtils.closeProgressDialog();
+            DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0003);
         }
     }
 

@@ -2136,8 +2136,6 @@ public void  closefields(){
                                 spinnerSelectStRef.setAdapter(arrayAdapter);
                                 ProgressDialogUtils.closeProgressDialog();
 
-
-
                             }
                         } catch (Exception ex) {
                             try {
@@ -2317,7 +2315,6 @@ public void  closefields(){
 
 
       try {
-
           WMSCoreMessage message = new WMSCoreMessage();
           message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
           final InventoryDTO inventoryDTO = new InventoryDTO();
@@ -2412,7 +2409,6 @@ public void  closefields(){
                                   common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
                               } else {
 
-
                                   /*List<LinkedTreeMap<?, ?>> _lInventory = new ArrayList<LinkedTreeMap<?, ?>>();
                                   _lInventory = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();*/
                                   List<InventoryDTO> lstInventory = new ArrayList<InventoryDTO>();
@@ -2424,12 +2420,8 @@ public void  closefields(){
                                       JSONArray f =  Table.getJSONArray("Table");
                                       //JsonArray s
                                       int n;
-
                                       for (int i = 0; i < f.length(); ++i) {
                                           JSONObject rec = f.getJSONObject(i);
-
-
-
                                           if(rec.getString("N").equalsIgnoreCase("-1")){
                                               common.showUserDefinedAlertType(rec.getString("S"), getActivity(), getContext(), "Error");
                                               cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));

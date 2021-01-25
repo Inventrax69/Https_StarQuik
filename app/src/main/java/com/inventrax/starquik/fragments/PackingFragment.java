@@ -241,8 +241,6 @@ public class PackingFragment extends Fragment implements View.OnClickListener, B
         this.filter = new IntentFilter();
         this.filter.addAction("sw.reader.decode.complete");
         getActivity().registerReceiver(this.myDataReceiver, this.filter);
-
-
         common = new Common();
         gson = new GsonBuilder().create();
         ProgressDialogUtils.closeProgressDialog();
@@ -1419,7 +1417,6 @@ public class PackingFragment extends Fragment implements View.OnClickListener, B
                                             isSKU=true;
 
                                             if(scanType.equals("Auto")){
-
                                                 lblReceivedQty.setText("1");
                                                 lblReceivedQty.clearFocus();
                                                 lblReceivedQty.setEnabled(false);
