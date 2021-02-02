@@ -395,7 +395,11 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
             if (!ProgressDialogUtils.isProgressActive()) {
 
                 if(!isPalletScaned){
-                    ValidatePallet(scannedData);
+                    isPalletScaned=true;
+                    txtFromPallet.setText(scannedData);
+                    cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.white));
+                    ivScanFromCont.setImageResource(R.drawable.check);
+                    //ValidatePallet(scannedData);
                 }/*else{
 
                     txtLocation.setText(scannedData);

@@ -127,7 +127,7 @@
 
     <string name="title_activity_cycle_count">Cycle Count</string>
     <string name="title_activity_bin_transfer">Bin Transfer</string>
-    <string name="title_activity_load_balancing">Load Balanceing</string>
+    <string name="title_activity_load_balancing">Load Balancing</string>
     <string name="title_activity_sku_transfer">Sku Transfer</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_picking">Picking</string>

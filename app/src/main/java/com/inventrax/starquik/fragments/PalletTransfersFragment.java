@@ -311,11 +311,8 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             case R.id.btn_clear:
                 Clearfields();                       // clear the scanned fields
                 break;
-
-
             case R.id.btnGo:
-                if (!whId.equals("")) {
-
+                if(!whId.equals("")) {
                     getInboundId();
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
@@ -941,7 +938,6 @@ public void  closefields(){
     }
 
     public void getTenantId() {
-
         for (HouseKeepingDTO oHouseKeeping : lstTenants) {
             // iterating housekeeping list to get tenant id of selected tenant
             if (oHouseKeeping.getTenantName().equals(selectedTenant)) {
@@ -1585,10 +1581,7 @@ public void  closefields(){
                                 WMSExceptionMessage owmsExceptionMessage = null;
 
                                 for (int i = 0; i < _lExceptions.size(); i++) {
-
                                     owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
                                 }
 
                                 ProgressDialogUtils.closeProgressDialog();
@@ -2741,6 +2734,7 @@ public void  closefields(){
             inventoryDTO.setTenantID(tenantId);
             inventoryDTO.setWarehouseId(whId);
             inventoryDTO.setWarehouse(selectedWH);
+            inventoryDTO.setInboundID(inboundId);
             List<InventoryDTO> invList = adapter.getList();
             for (int i=0;i<invList.size();i++)
             {
@@ -2829,6 +2823,7 @@ public void  closefields(){
                                         dto = new InventoryDTO(_lResult.get(i).entrySet());
 
                                         if (dto.getResult().equals("1")) {
+
                                              Clearfields();
                                             // Clearing data after completion of transfer
 

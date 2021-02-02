@@ -152,12 +152,10 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
     }
 
     private void loadFormControls() {
-
         SharedPreferences sp = getActivity().getSharedPreferences("LoginActivity", Context.MODE_PRIVATE);
         Userid = sp.getString("RefUserId", "");
         scanType = sp.getString("scanType", "");
         accountId = sp.getString("AccountId", "");
-
         rlIPalletTransfer = (RelativeLayout) rootView.findViewById(R.id.rlIPalletTransfer);
         rlSelect = (RelativeLayout) rootView.findViewById(R.id.rlSelect);
 
@@ -175,7 +173,6 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
         sug_loc=(TextInputEditText) rootView.findViewById(R.id.sug_loc);
         lstTenants = new ArrayList<HouseKeepingDTO>();
         lstWarehouse = new ArrayList<HouseKeepingDTO>();
-
         spinnerSelectTenant = (SearchableSpinner) rootView.findViewById(R.id.spinnerSelectTenant);
         spinnerSelectWarehouse = (SearchableSpinner) rootView.findViewById(R.id.spinnerSelectWarehouse);
 
@@ -213,7 +210,6 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Storerefno = spinnerSelectStRef.getSelectedItem().toString();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -286,16 +282,13 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
                 Clearfields();                       // clear the scanned fields
                 break;
 
-
             case R.id.btnGo:
                 if (!whId.equals("")) {
-
                     getInboundId();
                     rlSelect.setVisibility(View.GONE);
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
                     btnBinComplete.setEnabled(false);
                     //getTotalPutwayCount();
-
                     // method to get the storage locations
                 } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0011, getActivity(), getContext(), "Error");
@@ -1194,7 +1187,7 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
 
                                     common.showUserDefinedAlertType(errorMessages.EMC_0009, getActivity(), getContext(), "Warning");
                                 }
-                            } else {
+                            }else {
                                 //isContanierScanned=false;
                                 common.showUserDefinedAlertType("Error while getting data", getActivity(), getContext(), "Error");
                             }
@@ -1209,7 +1202,7 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
                         DialogUtils.showAlertDialog(getActivity(), errorMessages.EMC_0001);
                     }
                 });
-            } catch (Exception ex) {
+            }catch(Exception ex) {
                 try {
                     exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "002_02", getActivity());
                     logException();
@@ -1522,9 +1515,7 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
     }
 
     public void GetActiveStockData() {
-
         try {
-
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
             InventoryDTO inventoryDTO = new InventoryDTO();
@@ -1664,7 +1655,8 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
 
 
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             try {
                 exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
                 logException();
@@ -1730,7 +1722,6 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
                                 for (int i = 0; i < _lExceptions.size(); i++) {
 
                                     owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
 
                                 }
 
@@ -2028,7 +2019,8 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
     }
     public void getInboundId() {
         for (InboundDTO oInbound : lstInbound) {
-            if (oInbound.getStoreRefNo().equals(Storerefno)) {                // Gets selected inbound id of ref# from the list
+            if (oInbound.getStoreRefNo().equals(Storerefno)) {
+                // Gets selected inbound id of ref# from the list
                 // if the selected ref# equals
                 // to the list of ref no
                 inboundId = oInbound.getInboundID();

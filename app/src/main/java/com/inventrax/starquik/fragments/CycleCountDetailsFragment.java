@@ -400,8 +400,6 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
     }
 
     public void getSLocs() {
-
-
         List<String> _lstSLocNames = new ArrayList<>();
         _lstSLocNames.add("OK");
         _lstSLocNames.add("Damage");
@@ -504,7 +502,11 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                     ValidateLocation(scannedData);
                 } else {
                     if (!isPalletScanned) {
-                        ValidatePallet(scannedData);
+                        isPalletScanned = true;
+                        cvScanContainer.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        ivScanContainer.setImageResource(R.drawable.check);
+                        etContainer.setText(scannedData);
+                       // ValidatePallet(scannedData);
                     } else {
                         ValiDateMaterial(scannedData);
                         materialcode =scannedData;

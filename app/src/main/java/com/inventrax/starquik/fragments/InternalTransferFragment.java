@@ -409,7 +409,12 @@ public class InternalTransferFragment extends Fragment implements View.OnClickLi
                     ValidateLocation(scannedData);
                 } else {
                     if (!isPalletScaned) {
-                        ValidatePallet(scannedData);
+                     //ValidatePallet(scannedData);
+                        etPalletFrom.setText(scannedData);
+                        isPalletScaned = true;
+                        cvScanFromCont.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        ivScanFromCont.setImageResource(R.drawable.check);
+
                     } else {
                         if (etSku.getText().toString().isEmpty()) {
                             ValiDateMaterial(scannedData);
@@ -1626,6 +1631,7 @@ public class InternalTransferFragment extends Fragment implements View.OnClickLi
             inventoryDTO.setMaterialCode(Materialcode);
             inventoryDTO.setToLocationCode(etLocationTo.getText().toString());
             inventoryDTO.setQuantity(etQty.getText().toString());
+            //inventoryDTO.setInboundID("0");
             if (storageloc.equalsIgnoreCase("SLOC")) {
                 if (!isSKUScanned) {
                     inventoryDTO.setSLOC("");
