@@ -132,6 +132,7 @@ public class SkuPutawayFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
+
     /// Loading form Controls
     private void loadFormControls() {
 

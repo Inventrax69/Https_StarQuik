@@ -49,6 +49,7 @@ import retrofit2.Response;
  * Created by Padmaja.B on 20/12/2018.
  */
 
+
 public class UnloadingFragment extends Fragment implements View.OnClickListener {
 
     private View rootView;
@@ -68,12 +69,9 @@ public class UnloadingFragment extends Fragment implements View.OnClickListener 
     String userId = null, scanType = null, accountId = null, inboundId = null, invoiceQty = null, receivedQty = "";
     String DefaultSloc = null;
     List<List<EntryDTO>> lstEntry;
-
     List<EntryDTO> entryDTOList;
-
     List<String> vehicles;
     String vehilceNo = "", dock = "";
-
     private ExceptionLoggerUtils exceptionLoggerUtils;
     private ErrorMessages errorMessages;
 
@@ -190,7 +188,6 @@ public class UnloadingFragment extends Fragment implements View.OnClickListener 
     }
 
     public void GetInboundDeatils() {
-
         Bundle bundle = new Bundle();
         bundle.putString("Storefno", Storerefno);
         bundle.putString("inboundId", inboundId);

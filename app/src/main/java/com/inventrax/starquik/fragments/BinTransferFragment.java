@@ -1883,21 +1883,15 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
 
 
     public void getStoreRefNo() {
-
         try {
-
-
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inbound, getContext());
             InboundDTO inboundDTO = new InboundDTO();
             inboundDTO.setUserId(Userid);
             inboundDTO.setAccountID(accountId);
             message.setEntityObject(inboundDTO);
-
-
             Call<String> call = null;
             ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
-
             try {
                 //Checking for Internet Connectivity
                 // if (NetworkUtils.isInternetAvailable()) {
@@ -1963,8 +1957,6 @@ public class BinTransferFragment extends Fragment implements View.OnClickListene
 
                                     // List of store ref no.
                                     _lstRefNo.add(lstDto.get(i).getStoreRefNo());
-
-
                                 }
 
 

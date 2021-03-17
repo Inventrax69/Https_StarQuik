@@ -81,7 +81,7 @@ import static com.inventrax.starquik.util.ScreenUtils.getWindowManager;
  * Created by Prasann on 05/08/2018.
  */
 
-public class LoadBalanceingFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
+public class LoadBalancingFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
 
     // This is made for testing
     private static final String classCode = "API_FRAG_0011";
@@ -139,7 +139,7 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
         }
     }
 
-    public LoadBalanceingFragment() {
+    public LoadBalancingFragment() {
 
     }
 
@@ -1405,9 +1405,9 @@ public class LoadBalanceingFragment extends Fragment implements View.OnClickList
     }
 
 
+
     public void PalletTransferLoadBalancing() {
         try {
-
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
             InventoryDTO inventoryDTO = new InventoryDTO();

@@ -904,7 +904,7 @@ public class GoodsInFragment extends Fragment implements View.OnClickListener, B
             ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
 
             try {
-                //Checking for Internet Connectivity
+                //Checking for Internet Connectivitylo
                 // if (NetworkUtils.isInternetAvailable()) {
                 // Calling the Interface method
                 call = apiService.ValidatePallet(message);

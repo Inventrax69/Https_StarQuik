@@ -272,7 +272,8 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
             expandable_list_view = (ExpandableListView) layout.findViewById(R.id.expandable_list_view);
 
             if(scanType.equals("Auto")){
-                createListDataAuto();
+                //createListDataAuto();
+                createListData();
             }else{
                 createListData();
             }
@@ -474,7 +475,7 @@ public class DrawerFragment extends Fragment implements View.OnClickListener {
             }
             break;
             case "Load Balancing": {
-                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new LoadBalanceingFragment());
+                FragmentUtils.replaceFragmentWithBackStack(getActivity(), R.id.container_body, new LoadBalancingFragment());
             }
             break;
             default:

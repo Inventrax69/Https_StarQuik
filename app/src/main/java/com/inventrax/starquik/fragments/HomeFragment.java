@@ -36,7 +36,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadFormControls() {
-
         SharedPreferences sp = getActivity().getSharedPreferences("LoginActivity", Context.MODE_PRIVATE);
         userId = sp.getString("RefUserId", "");
         scanType = sp.getString("scanType", "");
@@ -72,14 +71,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ll_load_generation.setOnClickListener(this);
         ll_loading.setOnClickListener(this);
 
-        if (scanType.equals("Auto")) {
+        /*if (scanType.equals("Auto")) {
             ll_linear1.setVisibility(View.GONE);
             ll_linear2.setVisibility(View.VISIBLE);
         } else {
             ll_linear1.setVisibility(View.VISIBLE);
             ll_linear2.setVisibility(View.GONE);
         }
-
+*/
 
     }
 
@@ -88,13 +87,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Home");
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
 
             case R.id.ll_receive:

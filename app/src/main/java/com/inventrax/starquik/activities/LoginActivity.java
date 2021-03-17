@@ -122,7 +122,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
     private static final int PERMISSION_REQUEST_CODE = 769;
     AlertDialog.Builder builder;
     TextView txtVersionName;
-
     @SuppressLint("StaticFieldLeak")
     @Override
     protected void onResume() {
@@ -137,7 +136,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
 
         SharedPreferences sp = this.getSharedPreferences("SettingsActivity", Context.MODE_PRIVATE);
         serviceUrlString = sp.getString("url", "");
-
         if(!serviceUrlString.isEmpty()){
             new AsyncTask<String, String, String>() {
                 @Override
@@ -146,7 +144,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
                     String json_string = new GetUpdateJsonResponse().getContents(serviceUrlString+"/update.json");
 
                     try{
-
                         final JSONObject json = new JSONObject(json_string);
                         int result = json.getInt(JSON_VERSION_CODE);
                         if(versionCode < result){
@@ -201,8 +198,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
 
 
     }
-
-
     private void displayNeverAskAgainDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -339,7 +334,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
                 btnLogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         if (!inputUserId.getText().toString().isEmpty() && !inputPassword.getText().toString().isEmpty()) {
                             //materialDialogUtil.showErrorDialog(LoginActivity.this,"Failed Failed Failed Failed Failed Failed Failed Failed Failed Failed Failed Failed");
                             if (submitForm()) {
@@ -350,7 +344,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
                                     }catch (Exception e){
                                         DialogUtils.showAlertDialog(LoginActivity.this, "Configure Url Correctly");
                                     }
-
                                 } else {
                                     DialogUtils.showAlertDialog(LoginActivity.this, "Configure Url");
                                 }
@@ -549,13 +542,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Adapt
                     if (response.body() != null) {
 
                         core = gson.fromJson(response.body().toString(), WMSCoreMessage.class);
-
                         if (core.getEntityObject() != null) {
-
                             if ((core.getType().toString().equals("Exception"))) {
                                 List<LinkedTreeMap<?, ?>> _lExceptions = new ArrayList<LinkedTreeMap<?, ?>>();
                                 _lExceptions = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
-
                                 WMSExceptionMessage owmsExceptionMessage = null;
                                 for (int i = 0; i < _lExceptions.size(); i++) {
 

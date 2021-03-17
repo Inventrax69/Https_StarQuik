@@ -2282,7 +2282,6 @@ public class PutawayFragment extends Fragment implements View.OnClickListener, B
     }
 
     public void skipItem() {
-
         WMSCoreMessage message = new WMSCoreMessage();
         message = common.SetAuthentication(EndpointConstants.PutAwayDTO, getContext());
         PutawayDTO putawayDTO = new PutawayDTO();
@@ -2407,9 +2406,7 @@ public class PutawayFragment extends Fragment implements View.OnClickListener, B
 
                                         cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.skuColor));
                                         ivScanSku.setImageResource(R.drawable.fullscreen_img);
-
                                         returningObj = dto;
-
                                     } else {
                                         rlSkip.setVisibility(View.GONE);
                                         rlStRefSelect.setVisibility(View.GONE);

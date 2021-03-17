@@ -31,7 +31,7 @@ public class UpdateApp extends AsyncTask<String, Integer, String> {
     private ProgressDialog mPDialog;
     private Context mContext;
 
-    public void setContext(Activity context) {
+        public void setContext(Activity context) {
         mContext = context;
         context.runOnUiThread(new Runnable() {
             @Override

@@ -2,7 +2,7 @@ package com.inventrax.starquik.services;
 
 import android.content.Context;
 
-import com.inventrax.starquik.BuildConfig;
+import android.support.v4.BuildConfig;
 import com.inventrax.starquik.R;
 import com.inventrax.starquik.common.constants.ServiceURL;
 
@@ -71,7 +71,7 @@ private static void initHttpLogging() {
 
             SSLContext sslContext = null;
             try {
-                sslContext = createCertificate(context.getResources().openRawResource(R.raw.merlin));
+                sslContext = createCertificate(context.getResources().openRawResource(R.raw.starquik));
             } catch (CertificateException | IOException | KeyStoreException | KeyManagementException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }

@@ -154,5 +154,7 @@ public class ErrorMessages {
     public String EMC_087 = "Please Scan To Container";
     public String EMC_088= "Please scan valid suggested location";
     public String EMC_089 = "No pending Crates available";
+    public String EMC_090 = "STO Closed Successfully.";
+    public String EMC_091 = "Few crates are not alloted at wms";
 
 }

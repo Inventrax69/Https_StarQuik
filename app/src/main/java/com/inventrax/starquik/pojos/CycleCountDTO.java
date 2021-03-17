@@ -90,6 +90,8 @@ public class CycleCountDTO {
 
     @SerializedName("StorageLocation")
     private String StorageLocation;
+    @SerializedName("Bin")
+    private String Bin;
 
 
     public CycleCountDTO() {
@@ -323,6 +325,12 @@ public class CycleCountDTO {
                 case "CycleCountSeqCode":
                     if (entry.getValue() != null) {
                         this.setCycleCountSeqCode(entry.getValue().toString());
+                    }
+                    break;
+
+                case "Bin":
+                    if (entry.getValue() != null) {
+                        this.setBin(entry.getValue().toString());
                     }
                     break;
 
@@ -613,4 +621,11 @@ public class CycleCountDTO {
         CycleCountSeqCode = cycleCountSeqCode;
     }
 
+    public String getBin() {
+        return Bin;
+    }
+
+    public void setBin(String bin) {
+        Bin = bin;
+    }
 }

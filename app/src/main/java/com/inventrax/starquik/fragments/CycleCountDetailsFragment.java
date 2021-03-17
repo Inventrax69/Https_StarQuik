@@ -116,8 +116,8 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
     boolean isValidLocation = false;
     boolean isPalletScanned = false;
     boolean isRSNScanned = false;
-    String Rack = "", Column = "", Level = "",CycleCountSeqCode="";
-    TextView tvRack, tvColumn, tvLevel;
+    String Rack = "", Column = "", Level = "",CycleCountSeqCode="",Bin="";
+    TextView tvRack, tvColumn, tvLevel,tvBin;
     SearchableSpinner spinnerSelectSloc;
     String storageLoc;
 
@@ -192,7 +192,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
         tvRack = (TextView) rootView.findViewById(R.id.tvRack);
         tvColumn = (TextView) rootView.findViewById(R.id.tvColumn);
         tvLevel = (TextView) rootView.findViewById(R.id.tvLevel);
-
+        tvBin = (TextView) rootView.findViewById(R.id.tvBin);
         etLocation = (EditText) rootView.findViewById(R.id.etLocation);
         etContainer = (EditText) rootView.findViewById(R.id.etContainer);
         etSerial = (EditText) rootView.findViewById(R.id.etSerial);
@@ -236,10 +236,12 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
         Column = getArguments().getString("Column");
         Level = getArguments().getString("Level");
         CycleCountSeqCode = getArguments().getString("CycleCountSeqCode");
+        Bin = getArguments().getString("Bin");
 
         tvRack.setText("Rack : " + Rack);
         tvColumn.setText("Col : " + Column);
         tvLevel.setText("Level : " + Level);
+        tvBin.setText("Bin : " +  Bin);
 
         exceptionLoggerUtils = new ExceptionLoggerUtils();
         errorMessages = new ErrorMessages();
@@ -312,13 +314,11 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
                                     common.setIsPopupActive(false);
                                     releaseCycleCountLocation();
                                     break;
-
                                 case DialogInterface.BUTTON_NEGATIVE:
                                     common.setIsPopupActive(false);
                                     break;
@@ -326,14 +326,13 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
                         }
                     });
-                } else {
+                   } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0007, getActivity(), getContext(), "Error");
                     return;
                 }
                 break;
 
             case R.id.btnConfirm:
-
                     if (etCCQty.getText().toString().isEmpty()) {
                         common.showUserDefinedAlertType("Please enter quantity", getActivity(), getContext(), "Error");
                         return;
@@ -342,13 +341,11 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 switch (which) {
                                     case DialogInterface.BUTTON_POSITIVE:
                                         common.setIsPopupActive(false);
                                         upsertCycleCount();
                                         break;
-
                                     case DialogInterface.BUTTON_NEGATIVE:
                                         common.setIsPopupActive(false);
                                         break;
@@ -381,14 +378,10 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                 break;
 
             case R.id.btnExportCC:
-
                 if (!etLocation.getText().toString().isEmpty()) {
-
                     rlCC.setVisibility(View.GONE);
                     rlCCExport.setVisibility(View.VISIBLE);
-
                     rvPendingCC.setAdapter(null);
-
                     getCycleCountInformation();
 
                 } else {
@@ -753,7 +746,6 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                                 isValidLocation = false;
                                 cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
                                 ivScanLocation.setImageResource(R.drawable.invalid_cross);
-
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
                             } else {
@@ -903,7 +895,6 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
                             } else {
-
                                 List<LinkedTreeMap<?, ?>> _lstCC = new ArrayList<LinkedTreeMap<?, ?>>();
                                 _lstCC = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
 
@@ -1094,7 +1085,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
                                 for (int i = 0; i < lstDto.size(); i++) {
 
                                     if (lstDto.get(i).getResult().equals("Confirmed successfully")) {
-
+                                        common.showUserDefinedAlertType("Scanned Sucessfully", getActivity(), getContext(), "Success");
                                         cvScanSKU.setCardBackgroundColor(getResources().getColor(R.color.skuColor));
                                         ivScanSKU.setImageResource(R.drawable.fullscreen_img);
 
@@ -1298,6 +1289,7 @@ public class CycleCountDetailsFragment extends Fragment implements View.OnClickL
             cycleCountDTO.setCCName(lblCycleCount.getText().toString());
             cycleCountDTO.setLocation(etLocation.getText().toString());
             cycleCountDTO.setWarehouseID(warehouseId);
+            cycleCountDTO.setPalletNo(etContainer.getText().toString());
             cycleCountDTO.setTenantId(tenantId);
             cycleCountDTO.setCycleCountSeqCode(CycleCountSeqCode);
             message.setEntityObject(cycleCountDTO);

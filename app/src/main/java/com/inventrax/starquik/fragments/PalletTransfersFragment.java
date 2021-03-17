@@ -88,7 +88,6 @@ import static com.inventrax.starquik.util.ScreenUtils.getWindowManager;
  */
 
 public class PalletTransfersFragment extends Fragment implements View.OnClickListener, BarcodeReader.TriggerListener, BarcodeReader.BarcodeListener {
-
     // This is made for testing
     private static final String classCode = "API_FRAG_0011";
     private View rootView;
@@ -109,7 +108,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
     private Button btnBinComplete, btn_clear, btnGo,btn_export,btn_close;
     ScanDTO scanDTOPal;
     String s = null;
-
     private String Materialcode = null, Userid = null, scanType = "", accountId = "", storageloc = "";
     private int IsToLoc = 0;
     private ExceptionLoggerUtils exceptionLoggerUtils;
@@ -160,7 +158,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         rootView = inflater.inflate(R.layout.fragment_pallet_tranfers, container, false);
         loadFormControls();
         return rootView;
-
     }
 
     private void loadFormControls() {
@@ -244,11 +241,9 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         btnBinComplete = (Button) rootView.findViewById(R.id.btnBinComplete);
         btn_close= (Button) rootView.findViewById(R.id.btn_close);
         btn_export = (Button) rootView.findViewById(R.id.btn_export);
-
         btn_clear = (Button) rootView.findViewById(R.id.btn_clear);
         btnGo = (Button) rootView.findViewById(R.id.btnGo);
         sku_list=(ListView)rootView.findViewById(R.id.sku_list);
-
         btn_close.setOnClickListener(this);
         btnBinComplete.setOnClickListener(this);
         btn_export.setOnClickListener(this);
@@ -256,7 +251,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
         btnGo.setOnClickListener(this);
         cvScanFromCont.setOnClickListener(this);
         so_number.setOnClickListener(this);
-
         exceptionLoggerUtils = new ExceptionLoggerUtils();
         errorMessages = new ErrorMessages();
         soundUtils = new SoundUtils();
@@ -318,7 +312,6 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                     rlIPalletTransfer.setVisibility(View.VISIBLE);
                     btnBinComplete.setEnabled(false);
                         getTotalPutwayCount();
-
                     // method to get the storage locations
                 } else {
                     common.showUserDefinedAlertType(errorMessages.EMC_0011, getActivity(), getContext(), "Error");
@@ -346,13 +339,14 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
             case R.id.btn_close:
                 closefields();
                 break;
-            /*case R.id.so_number:
+            case R.id.so_number:
                 DialogUtils.showConfirmDialog(getActivity(), "Shipment Closure","Are you Sure,  you want to close the Shipment?", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                              //   shipMentClosed();
+                                shipmentcloser();
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
@@ -360,7 +354,7 @@ public class PalletTransfersFragment extends Fragment implements View.OnClickLis
                         }
                     }
                 });
-                break;*/
+                break;
 
         }
 
@@ -415,18 +409,13 @@ public void  closefields(){
 
 
     private void Clearfields() {
-
-
-
         cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
         ivScanLocation.setImageResource(R.drawable.fullscreen_img);
         cvScanSku.setCardBackgroundColor(getResources().getColor(R.color.palletColor));
         ivScansku.setImageResource(R.drawable.fullscreen_img);
          sku_list.setAdapter(null);
         isSKUScanned=false;
-
          textFromSku.setText("");
-
         txtLocation.setText("");
         sug_loc.setText("");
         isTOContainerScanner=false;
@@ -446,7 +435,6 @@ public void  closefields(){
 
     public void  loadList(List<InventoryDTO> inventoryDTO_list){
         adapter=new SDKAdapter(getActivity(),inventoryDTO_list);
-
         sku_list.setAdapter(adapter);
     }
 
@@ -503,12 +491,9 @@ public void  closefields(){
                    }
                 }
 
-
-
             } else {
                 if (!Common.isPopupActive()) {
                     common.showUserDefinedAlertType(errorMessages.EMC_080, getActivity(), getContext(), "Error");
-
                 }
                 soundUtils.alertWarning(getActivity(), getContext());
 
@@ -1254,9 +1239,7 @@ public void  closefields(){
                              scanDTOPal = new ScanDTO(_lResult.entrySet());
                             ProgressDialogUtils.closeProgressDialog();
                             if (scanDTOPal != null) {
-
                                 if (scanDTOPal.getScanResult() && !scanDTOPal.isAllocationType()) {
-
                                     if(!isPalletScaned){
                                         isSKUScanned=true;
                                         isPalletScaned=true;
@@ -1397,7 +1380,6 @@ public void  closefields(){
 
                                 owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
                             }
-
                             txtLocation.setText("");
                             cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
                             ivScanLocation.setImageResource(R.drawable.invalid_cross);
@@ -1416,11 +1398,9 @@ public void  closefields(){
                                         ivScanLocation.setImageResource(R.drawable.check);
 
                                 } else {
-
                                     txtLocation.setText("");
                                     cvScanLocation.setCardBackgroundColor(getResources().getColor(R.color.white));
                                     ivScanLocation.setImageResource(R.drawable.warning_img);
-
                                     common.showUserDefinedAlertType(errorMessages.EMC_0016, getActivity(), getContext(), "Warning");
 /*                                    etLocationTo.setText("");
                                     cvScanToLoc.setCardBackgroundColor(getResources().getColor(R.color.white));
@@ -1813,10 +1793,7 @@ public void  closefields(){
         }
     }
 
-
-
-
-    public void getTotalPutwayCount() {
+  public void getTotalPutwayCount() {
         try {
 
             WMSCoreMessage message = new WMSCoreMessage();
@@ -1866,22 +1843,17 @@ public void  closefields(){
 
                                     owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
 
-
                                 }
 
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
                             } else {
-
                                 Log.v("ABCDE",new Gson().toJson(core.getEntityObject()));
-
                                LinkedTreeMap<?, ?> _lInventory = new LinkedTreeMap<>();
                                 _lInventory = (LinkedTreeMap<?, ?>) core.getEntityObject();
                                 ProgressDialogUtils.closeProgressDialog();
                                String putway =  _lInventory.get("PutwayCount").toString();
                                     so_number.setText(putway);
-
-
                             }
                         } else {
                             ProgressDialogUtils.closeProgressDialog();
@@ -1927,8 +1899,6 @@ public void  closefields(){
             return;
         }
     }
-
-
 
     public void getMissingCrates() {
         try {
@@ -2042,8 +2012,6 @@ public void  closefields(){
     public void getStoreRefNo() {
 
         try {
-
-
             WMSCoreMessage message = new WMSCoreMessage();
             message = common.SetAuthentication(EndpointConstants.Inbound, getContext());
             InboundDTO inboundDTO = new InboundDTO();
@@ -2094,10 +2062,7 @@ public void  closefields(){
 
                                 WMSExceptionMessage owmsExceptionMessage = null;
                                 for (int i = 0; i < _lExceptions.size(); i++) {
-
                                     owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
                                 }
                                 ProgressDialogUtils.closeProgressDialog();
                                 common.showAlertType(owmsExceptionMessage, getActivity(), getContext());
@@ -2165,7 +2130,7 @@ public void  closefields(){
             try {
                 exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_04", getActivity());
                 logException();
-            } catch (IOException e) {
+            }catch (IOException e) {
                 e.printStackTrace();
             }
             ProgressDialogUtils.closeProgressDialog();
@@ -2179,6 +2144,147 @@ public void  closefields(){
                 // to the list of ref no
                 inboundId = oInbound.getInboundID();
             }
+        }
+    }
+    public void shipmentcloser() {
+        try {
+
+           /* WMSCoreMessage message = new WMSCoreMessage();
+            message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
+            final PutawayCountDTO putawayCountDTO = new PutawayCountDTO();
+            putawayCountDTO.setInboundID(inboundId);
+            message.setEntityObject(putawayCountDTO)*/;
+            WMSCoreMessage message = new WMSCoreMessage();
+            message = common.SetAuthentication(EndpointConstants.Inbound, getContext());
+            InboundDTO inboundDTO = new InboundDTO();
+
+            inboundDTO.setInboundID(inboundId);
+            message.setEntityObject(inboundDTO);
+
+
+            Call<String> call = null;
+            ApiInterface apiService = RetrofitBuilderHttpsEx.getInstance(getActivity()).create(ApiInterface.class);
+            try {
+                //Checking for Internet Connectivity
+                // if (NetworkUtils.isInternetAvailable()) {
+                // Calling the Interface method
+                ProgressDialogUtils.showProgressDialog("Please Wait");
+                call = apiService.ShipmentClosed(message);
+                // } else {
+                // DialogUtils.showAlertDialog(getActivity(), "Please enable internet");
+                // return;
+                // }
+
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_01", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ProgressDialogUtils.closeProgressDialog();
+                common.showUserDefinedAlertType(errorMessages.EMC_0002, getActivity(), getContext(), "Error");
+            }
+            try {
+                //Getting response from the method
+                call.enqueue(new Callback<String>() {
+
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        if (response.body()!=null) {
+                             String responseBody = response.body().toString();
+                            JSONObject jsObj = null;
+                            try {
+                                jsObj = new JSONObject(responseBody);
+                                JSONArray jsArray = jsObj.getJSONArray("sto_result");
+                                for (int i = 0; i < jsArray.length(); i++) {
+                                    JSONObject jsonobject = jsArray.getJSONObject(i);
+                                    String result = (jsonobject.getString("status"));
+                                    if (result.equalsIgnoreCase("1")){
+                                        common.showUserDefinedAlertType(errorMessages.EMC_090, getActivity(), getContext(), "Success");
+                                        ProgressDialogUtils.closeProgressDialog();
+                                    }
+                                    else {
+                                        common.showUserDefinedAlertType(errorMessages.EMC_091, getActivity(), getContext(), "Error");
+                                        ProgressDialogUtils.closeProgressDialog();
+                                    }
+
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                           /* JSONArray jsonarray = null;
+                            //List createNumList = new ArrayList<String>();
+                            try {
+                                jsonarray = new JSONArray(responseBody);
+
+                                for (int i = 0; i < jsonarray.length(); i++) {
+                                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+
+                                }
+                                *//*ProgressDialogUtils.closeProgressDialog();
+                                if (createNumList.size()>0) {
+                                    crateDialog(createNumList);*//*
+                                //   }
+
+                               *//* else {
+                                    ProgressDialogUtils.closeProgressDialog();
+                                    common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
+                                }*//*
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ProgressDialogUtils.closeProgressDialog();
+                                common.showUserDefinedAlertType(errorMessages.EMC_089, getActivity(), getContext(), "Warning");
+
+
+                            }
+*/
+                        }
+                        else {
+                            common.showUserDefinedAlertType("Error Body", getActivity(), getContext(), "Error");
+                            ProgressDialogUtils.closeProgressDialog();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        ProgressDialogUtils.closeProgressDialog();
+
+                        Toast.makeText(getActivity(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception ex) {
+                try {
+                    exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_02", getActivity());
+                    logException();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                sku_list.setAdapter(null);
+                ProgressDialogUtils.closeProgressDialog();
+                common.showUserDefinedAlertType(errorMessages.EMC_0001, getActivity(), getContext(), "Error");
+
+
+            }
+        } catch (Exception ex) {
+            try {
+                exceptionLoggerUtils.createExceptionLog(ex.toString(), classCode, "001_03", getActivity());
+                logException();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ProgressDialogUtils.closeProgressDialog();
+            common.showUserDefinedAlertType(errorMessages.EMC_0003, getActivity(), getContext(), "Error");
+            return;
         }
     }
 
@@ -2304,9 +2410,9 @@ public void  closefields(){
         }
 
     }
+
+
   public void GetActivestockSKU(){
-
-
       try {
           WMSCoreMessage message = new WMSCoreMessage();
           message = common.SetAuthentication(EndpointConstants.Inventory, getContext());
@@ -2390,10 +2496,7 @@ public void  closefields(){
                                   WMSExceptionMessage owmsExceptionMessage = null;
 
                                   for (int i = 0; i < _lExceptions.size(); i++) {
-
                                       owmsExceptionMessage = new WMSExceptionMessage(_lExceptions.get(i).entrySet());
-
-
                                   }
 
                                   sku_list.setAdapter(null);
@@ -2739,7 +2842,6 @@ public void  closefields(){
             for (int i=0;i<invList.size();i++)
             {
                 qq =invList.get(i).getQuantity();
-
             }
            inventoryDTO.setQuantity(qq);
             inventoryDTO.setMaterialCode(textFromSku.getText().toString());
@@ -2811,7 +2913,6 @@ public void  closefields(){
                                         return;
                                     }
                                 } else {
-
                                     List<LinkedTreeMap<?, ?>> _lResult = new ArrayList<LinkedTreeMap<?, ?>>();
                                     _lResult = (List<LinkedTreeMap<?, ?>>) core.getEntityObject();
 
